@@ -7,20 +7,22 @@
 
 
 #include "Board.h"
+#include "Movement.h"
 
 class IA {
 public:
     Board b;
 
     IA();
-    void move(coord dep, coord fin);
+    void move(Movement m);
+    Movement genmove();
 
 private:
     TERMINAL_STYLES team;
     bool first_move;
     TERMINAL_STYLES next_move_color = GRAY;
 
-    void eval();
+    int eval();
 };
 
 
