@@ -1,2 +1,10 @@
-cmake-build-debug
+# cmake files
+[cC][mM]ake*
+Makefile
+!CMakeLists.txt
+
+# exe
+Kamisado*
+
+# IDE
 .idea

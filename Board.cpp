@@ -6,7 +6,7 @@
 #include <iostream>
 #include "Board.h"
 
-Board::Board(const char *file) {
+void Board::init(const char *file) {
     std::ifstream stream(file);
     char c;
 

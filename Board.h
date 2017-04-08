@@ -12,7 +12,8 @@
 
 class Board {
 public:
-    Board(const char *file);
+    Board(){}
+    void init(const char *file);
     void print() const;
     void move(coord dep, coord fin);
 
