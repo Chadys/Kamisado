@@ -7,17 +7,15 @@
 #include "Board.h"
 #include "IA.h"
 
-void command_input(Board &b, IA ia);
+void command_input(IA ia);
 
 int main() {
-    Board b;
     IA ia;
-    b.print();
-    command_input(b, ia);
+    command_input(ia);
     return 0;
 }
 
-void command_input(Board &b, IA ia){
+void command_input(IA ia){
     std::string line, command;
     while (std::getline(std::cin, line)){ //wait for user input
         std::istringstream sstream(line);
@@ -25,10 +23,9 @@ void command_input(Board &b, IA ia){
         if (command == "quit")
             exit(EXIT_SUCCESS);
         if (command == "init"){
-            int t;
-            sstream >> t;
-            b.init("./default_board.kms");
-            ia.init(b, t ? WHITE : BLACK);
+            ia.b.init("./default_board.kms");
+            ia.b.print();
+            continue;
         }
         if (command == "move"){
             coord dep, fin;
@@ -37,8 +34,8 @@ void command_input(Board &b, IA ia){
             sstream >> command;
             sstream >> fin.x;
             sstream >> fin.y;
-            b.move(dep, fin);
-            b.print();
+            ia.move(dep, fin);
+            ia.b.print();
             continue;
         }
     }

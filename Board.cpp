@@ -54,11 +54,3 @@ void Board::print() const{
     }
     std::cout << codeFromStyle(RESET) << std::endl;
 }
-
-
-void Board::move(coord dep, coord fin){
-    Case &old_c = this->cases[dep.x][dep.y];
-    Case &new_c = this->cases[fin.x][fin.y];
-    new_c.pion = old_c.pion;
-    old_c.pion = Pion::null;
-}

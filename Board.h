@@ -12,13 +12,13 @@
 
 class Board {
 public:
+    std::vector<std::vector<Case>> cases;
+
     Board(){}
     void init(const char *file);
     void print() const;
-    void move(coord dep, coord fin);
 
 private:
-    std::vector<std::vector<Case>> cases;
     static std::map<char, TERMINAL_STYLES> color_map;
 
     void add_pieces();

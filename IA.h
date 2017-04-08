@@ -10,12 +10,17 @@
 
 class IA {
 public:
-    IA() {}
-    void init(Board &b, TERMINAL_STYLES team);
+    Board b;
+
+    IA();
+    void move(coord dep, coord fin);
 
 private:
-    Board b;
     TERMINAL_STYLES team;
+    bool first_move;
+    TERMINAL_STYLES next_move_color = GRAY;
+
+    void eval();
 };
 
 
