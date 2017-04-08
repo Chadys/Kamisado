@@ -1,0 +1,21 @@
+//
+// Created by julie on 07/04/17.
+//
+
+#ifndef KAMISADO_CASE_H
+#define KAMISADO_CASE_H
+
+#include "header.h"
+#include "Pion.h"
+
+class Case {
+public:
+    Pion pion;
+    TERMINAL_STYLES color;
+
+    Case(const TERMINAL_STYLES color_ = BG_GRAY, const Pion &pion_ = Pion::null);
+    void add_piece(TERMINAL_STYLES team);
+};
+
+
+#endif //KAMISADO_CASE_H
