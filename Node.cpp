@@ -4,8 +4,8 @@
 
 #include <cmath>
 #include "Node.h"
+#include "IA.h"
 
-double Node::UCT_const = 0.4;
 
 Node::Node(Node *parent_, unsigned int depth_, Movement from_move_)
         : parent(parent_), depth(depth_), from_move(from_move_) {}
@@ -25,5 +25,5 @@ bool Node::best_comp(const Node *&n1, const Node *&n2){
 
 double Node::UTC_eval() const{
     return (this->victories/this->n_playouts) +
-            this->UCT_const*sqrt(log(this->parent->n_playouts)/this->n_playouts);
+            IA::UCT_const*sqrt(log(this->parent->n_playouts)/this->n_playouts);
 }

@@ -13,20 +13,17 @@ class Node {
 public:
     Node *parent;
     std::vector<Node *> children;
-    Movement from_move;
-    std::vector<Movement> moves_to;
+    Movement from_move; //move done to obtain this node
+    std::vector<Movement> moves_to; //moves that can be done from this node
+    unsigned int victories;
+    unsigned int n_playouts;
+    unsigned int depth;
 
     Node(Node *parent_ = nullptr, unsigned int depth_ = 0, Movement from_move_ = Movement());
     ~Node();
     double UTC_eval() const;
     static bool UCT_comp(const Node *&n1, const Node *&n2);
     static bool best_comp(const Node *&n1, const Node *&n2);
-
-private:
-    unsigned int victories;
-    unsigned int n_playouts;
-    unsigned int depth;
-    static double UCT_const;
 };
 
 

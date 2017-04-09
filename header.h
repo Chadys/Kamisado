@@ -61,7 +61,7 @@ enum TERMINAL_STYLES{
     BG_WHITE
 };
 
-static inline const char *codeFromStyle(enum TERMINAL_STYLES s)
+inline const char *codeFromStyle(enum TERMINAL_STYLES s)
 {
     static char const *strings[] = {"\e[0m", "\e[1m", "\e[2m", "\e[3m", "\e[4m", "\e[6m", "\e[7m", "\e[8m", "\e[9m",
                               "\e[30m", "\e[31m", "\e[32m", "\e[33m", "\e[34m", "\e[35m", "\e[36m", "\e[37m",
@@ -72,5 +72,10 @@ static inline const char *codeFromStyle(enum TERMINAL_STYLES s)
     return strings[s];
 }
 
+inline TERMINAL_STYLES invert_color(TERMINAL_STYLES color){
+    if (color == WHITE)
+        return BLACK;
+    return WHITE;
+}
 
 #endif //KAMISADO_HEADER_H

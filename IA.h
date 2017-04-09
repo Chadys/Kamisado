@@ -13,6 +13,7 @@
 class IA {
 public:
     Board b;
+    static double UCT_const;
 
     IA();
     void move(Movement m);
@@ -24,10 +25,12 @@ private:
     TERMINAL_STYLES next_move_color = GRAY;
     Node *MC_tree;
     static unsigned int max_depth;
+    static unsigned int max_playouts;
 
     int eval() const;
     static Movement best_move(const std::vector<Node*> &successors);
     std::vector<Movement> get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team) const;
+    static void playouts(Node *&n);
 };
 
 

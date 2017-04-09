@@ -7,7 +7,9 @@
 #include "IA.h"
 
 
-unsigned int max_depth = UINT_MAX;
+unsigned int IA::max_depth = UINT_MAX;
+unsigned int IA::max_playouts = UINT_MAX;
+double IA::UCT_const = 0.4;
 
 IA::IA() : first_move(true), team(GRAY) {}
 
@@ -30,8 +32,9 @@ int IA::eval() const{
 };
 
 Movement IA::genmove() {
-    bool stop = false;
-    Movement chosen;
+    Movement selected_move;
+    Node *ptr, *child;
+    unsigned int depth;
 
     if (this->first_move) {
         this->team = BLACK;
@@ -39,16 +42,41 @@ Movement IA::genmove() {
     }
     this->MC_tree = new Node;
     this->MC_tree->moves_to = this->get_moves(this->next_move_color, this->team);
-    while (!stop){
-
+    while (true){
+            /***selection***/
+        //while chosen node is fully expanded, keep going down
+        for (depth = 0, ptr = this->MC_tree;
+             ptr->moves_to.size() && ptr->children.size() == ptr->moves_to.size();
+             depth++) {
+            ptr = *std::max_element(ptr->children.cbegin(), ptr->children.cend(), Node::UCT_comp)
+            this->move(ptr->from_move);
+        }
+        //if terminal node selected
+        if (!ptr->moves_to.size() || depth >= this->max_depth)
+            break;
+            /***expansion***/
+        //create new child
+        selected_move = ptr->moves_to[ptr->children.size()];
+        child = new Node(ptr, depth+1, selected_move);
+        ptr->children.push_back(child);
+        child->moves_to = this->get_moves(this->b.cases[selected_move.fin.x][selected_move.fin.y].color,
+                                          depth%2 ? invert_color(this->team) : this->team);
+            /***simulation***/
+        playouts(child);
+            /***backpropagation***/
+        for(ptr = child; ptr != MC_tree; ptr = ptr->parent){
+            ptr->parent->victories += ptr->victories;
+            ptr->parent->n_playouts += ptr->n_playouts;
+            this->move({ptr->from_move.fin, ptr->from_move.dep});
+        }
     }
-    chosen =  best_move(MC_tree->children);
+    selected_move =  best_move(MC_tree->children);
     delete this->MC_tree;
-    return chosen;
+    return selected_move;
 }
 
 Movement IA::best_move(const std::vector<Node*> &successors){
-    return (*std::max_element(successors.cbegin(), successors.cend()))->from_move;
+    return (*std::max_element(successors.cbegin(), successors.cend(), Node::best_comp))->from_move;
 }
 
 std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team) const{
@@ -92,4 +120,8 @@ std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team)
         moves.push_back({pos, new_pos});
     }
     return moves;
+}
+
+void IA::playouts(Node *&n){
+
 }
