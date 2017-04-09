@@ -36,14 +36,14 @@ void Board::add_pieces() {
     count = 0;
     for (Case &c : this->cases[0]) {
         c.add_piece(BLACK, {0, count});
-        this->pions.push_back(c.pion);
+        this->pions.push_back(&c.pion);
         count++;
     }
     count = 0;
     x = this->cases.size()-1;
     for (Case &c : this->cases[x]) {
         c.add_piece(WHITE, {x, count});
-        this->pions.push_back(c.pion);
+        this->pions.push_back(&c.pion);
         count++;
     }
 }

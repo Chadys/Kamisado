@@ -28,7 +28,17 @@ void IA::move(Movement m){
 }
 
 int IA::eval() const{
-
+    unsigned int start = 0, finish = this->b.cases.size(), stop = this->b.pions.size()/2;
+    if (this->team == WHITE){
+        start = stop;
+        stop = this->b.pions.size();
+        finish = 0;
+    }
+    for (int i = start; i < stop; ++i) {
+        if (this->b.pions[i]->pos.x == finish)
+            return 1;
+    }
+    return 0;
 };
 
 Movement IA::genmove() {
@@ -48,7 +58,7 @@ Movement IA::genmove() {
         for (depth = 0, ptr = this->MC_tree;
              ptr->moves_to.size() && ptr->children.size() == ptr->moves_to.size();
              depth++) {
-            ptr = *std::max_element(ptr->children.cbegin(), ptr->children.cend(), Node::UCT_comp)
+            ptr = *std::max_element(ptr->children.begin(), ptr->children.end(), Node::UCT_comp);
             this->move(ptr->from_move);
         }
         //if terminal node selected
@@ -81,6 +91,7 @@ Movement IA::best_move(const std::vector<Node*> &successors){
 
 std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team) const{
     std::vector<Movement> moves;
+    Pion dummy(team, color, coord());
     coord pos;
     int front = team == BLACK ? 1 : -1;
     if (color == GRAY){
@@ -92,8 +103,8 @@ std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team)
         return moves;
     }
     auto p = std::find(team == BLACK ? this->b.pions.cbegin() : this->b.pions.cbegin()+8,
-                       this->b.pions.cend(), Pion(team, color, coord()));
-    pos = (*p).pos;
+                       this->b.pions.cend(), &dummy);
+    pos = (*p)->pos;
     moves.push_back({pos, pos});
     // front line
     for(coord new_pos = {pos.x+front, pos.y};
@@ -122,6 +133,6 @@ std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team)
     return moves;
 }
 
-void IA::playouts(Node *&n){
+void IA::playouts(Node *n){
 
 }

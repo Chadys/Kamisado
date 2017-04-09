@@ -13,7 +13,7 @@
 class Board {
 public:
     std::vector<std::vector<Case>> cases;
-    std::vector<Pion&> pions;
+    std::vector<Pion*> pions;
 
     Board(){}
     void init(const char *file);

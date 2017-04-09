@@ -15,11 +15,11 @@ Node::~Node(){
         delete child;
 };
 
-bool Node::UCT_comp(const Node *&n1, const Node *&n2){
+bool Node::UCT_comp(const Node *n1, const Node *n2){
     return n1->UTC_eval() < n2->UTC_eval();
 }
 
-bool Node::best_comp(const Node *&n1, const Node *&n2){
+bool Node::best_comp(const Node *n1, const Node *n2){
     return n1->victories/n1->n_playouts < n2->victories/n2->n_playouts;
 }
 

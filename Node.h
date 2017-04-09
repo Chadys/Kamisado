@@ -22,8 +22,8 @@ public:
     Node(Node *parent_ = nullptr, unsigned int depth_ = 0, Movement from_move_ = Movement());
     ~Node();
     double UTC_eval() const;
-    static bool UCT_comp(const Node *&n1, const Node *&n2);
-    static bool best_comp(const Node *&n1, const Node *&n2);
+    static bool UCT_comp(const Node *n1, const Node *n2);
+    static bool best_comp(const Node *n1, const Node *n2);
 };
 
 

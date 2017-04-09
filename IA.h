@@ -30,7 +30,7 @@ private:
     int eval() const;
     static Movement best_move(const std::vector<Node*> &successors);
     std::vector<Movement> get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team) const;
-    static void playouts(Node *&n);
+    static void playouts(Node *n);
 };
 
 
