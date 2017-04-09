@@ -26,7 +26,8 @@ private:
     static unsigned int max_depth;
 
     int eval() const;
-    Movement best_move(std::vector<Node*> successors);
+    static Movement best_move(const std::vector<Node*> &successors);
+    std::vector<Movement> get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team) const;
 };
 
 

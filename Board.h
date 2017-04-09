@@ -13,13 +13,14 @@
 class Board {
 public:
     std::vector<std::vector<Case>> cases;
+    std::vector<Pion&> pions;
 
     Board(){}
     void init(const char *file);
     void print() const;
 
 private:
-    static std::map<char, TERMINAL_STYLES> color_map;
+    static const std::map<char, TERMINAL_STYLES> color_map;
 
     void add_pieces();
 };

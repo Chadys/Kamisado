@@ -14,7 +14,7 @@ public:
     TERMINAL_STYLES color;
 
     Case(const TERMINAL_STYLES color_ = BG_GRAY, const Pion &pion_ = Pion::null);
-    void add_piece(TERMINAL_STYLES team);
+    void add_piece(TERMINAL_STYLES team, coord c);
 };
 
 

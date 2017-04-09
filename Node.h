@@ -14,6 +14,7 @@ public:
     Node *parent;
     std::vector<Node *> children;
     Movement from_move;
+    std::vector<Movement> moves_to;
 
     Node(Node *parent_ = nullptr, unsigned int depth_ = 0, Movement from_move_ = Movement());
     ~Node();
@@ -25,7 +26,6 @@ private:
     unsigned int victories;
     unsigned int n_playouts;
     unsigned int depth;
-    std::vector<Movement> moves_to;
     static double UCT_const;
 };
 

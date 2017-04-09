@@ -26,16 +26,26 @@ void Board::init(const char *file) {
 }
 
 
-std::map<char, TERMINAL_STYLES> Board::color_map =
+const std::map<char, TERMINAL_STYLES> Board::color_map =
         {{'O', BG_CYAN}, {'B', BG_BLUE}, {'V', BG_PURPLE}, {'P', BG_BRIGHTRED},
          {'Y', BG_YELLOW}, {'R', BG_RED}, {'G', BG_GREEN}, {'M', BG_BROWN}};
 
 
 void Board::add_pieces() {
-    for (Case &c : this->cases[0])
-        c.add_piece(BLACK);
-    for (Case &c : this->cases[this->cases.size()-1])
-        c.add_piece(WHITE);
+    unsigned int count, x;
+    count = 0;
+    for (Case &c : this->cases[0]) {
+        c.add_piece(BLACK, {0, count});
+        this->pions.push_back(c.pion);
+        count++;
+    }
+    count = 0;
+    x = this->cases.size()-1;
+    for (Case &c : this->cases[x]) {
+        c.add_piece(WHITE, {x, count});
+        this->pions.push_back(c.pion);
+        count++;
+    }
 }
 
 

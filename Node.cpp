@@ -12,7 +12,7 @@ Node::Node(Node *parent_, unsigned int depth_, Movement from_move_)
 
 Node::~Node(){
     for (auto child : this->children)
-    delete child;
+        delete child;
 };
 
 bool Node::UCT_comp(const Node *&n1, const Node *&n2){
@@ -20,7 +20,7 @@ bool Node::UCT_comp(const Node *&n1, const Node *&n2){
 }
 
 bool Node::best_comp(const Node *&n1, const Node *&n2){
-
+    return n1->victories/n1->n_playouts < n2->victories/n2->n_playouts;
 }
 
 double Node::UTC_eval() const{

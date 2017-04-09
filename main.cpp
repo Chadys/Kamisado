@@ -43,7 +43,6 @@ void command_input(IA ia){
             Movement m;
             sstream >> m.dep.x;
             sstream >> m.dep.y;
-            sstream >> command;
             sstream >> m.fin.x;
             sstream >> m.fin.y;
             ia.move(m);
@@ -78,5 +77,5 @@ void manage_signals(){
 
 inline void handler(int signum)
 {
-    std::cout << "=?\n\n";
+    std::cout << "= ?\n\n";
 }
