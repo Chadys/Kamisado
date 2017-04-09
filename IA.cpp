@@ -7,6 +7,10 @@
 
 IA::IA() : first_move(true), team(GRAY) {}
 
+IA::~IA() {
+    delete this->MC_tree;
+}
+
 
 void IA::move(Movement m){
     Case &old_c = this->b.cases[m.dep.x][m.dep.y];
@@ -25,5 +29,9 @@ int IA::eval(){
 };
 
 Movement IA::genmove() {
+    if (this->first_move) {
+        this->team = BLACK;
+        this->first_move = false;
+    }
 
 }

@@ -8,12 +8,14 @@
 
 #include "Board.h"
 #include "Movement.h"
+#include "Node.h"
 
 class IA {
 public:
     Board b;
 
     IA();
+    ~IA();
     void move(Movement m);
     Movement genmove();
 
@@ -23,6 +25,7 @@ private:
     TERMINAL_STYLES next_move_color = GRAY;
 
     int eval();
+    Node *MC_tree;
 };
 
 
