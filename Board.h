@@ -9,6 +9,7 @@
 #include <vector>
 #include <map>
 #include "Case.h"
+#include "Movement.h"
 
 class Board {
 public:
@@ -18,6 +19,7 @@ public:
     Board(){}
     void init(const char *file);
     void print() const;
+    void move(Movement m);
 
 private:
     static const std::map<char, TERMINAL_STYLES> color_map;

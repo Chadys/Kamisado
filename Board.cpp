@@ -10,8 +10,7 @@ void Board::init(const char *file) {
     std::ifstream stream(file);
     char c;
 
-    this->cases = std::vector<std::vector<Case>>();
-    std::vector<Case> line = std::vector<Case>();
+    std::vector<Case> line;
     while(stream >> std::noskipws >> c){
         if(c == '\n'){
             this->cases.push_back(line);
@@ -63,4 +62,12 @@ void Board::print() const{
         std::cout << codeFromStyle(RESET) << std::endl;
     }
     std::cout << codeFromStyle(RESET) << std::endl;
+}
+
+void Board::move(Movement m){
+    Case &old_c = this->cases[m.dep.x][m.dep.y];
+    Case &new_c = this->cases[m.fin.x][m.fin.y];
+    new_c.pion = old_c.pion;
+    new_c.pion.pos = m.fin;
+    old_c.pion = Pion::null;
 }
