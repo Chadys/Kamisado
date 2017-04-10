@@ -75,7 +75,10 @@ void manage_signals(){
         sigaction(SIGSYS, &sa, NULL) == -1);
 }
 
-inline void handler(int signum)
+inline void handler(int sig)
 {
     std::cout << "= ?\n\n";
+    signal(sig, SIG_DFL);
+    raise(sig);
+    return;
 }
