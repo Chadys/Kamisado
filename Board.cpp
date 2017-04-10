@@ -31,7 +31,7 @@ const std::map<char, TERMINAL_STYLES> Board::color_map =
 
 
 void Board::add_pieces() {
-    unsigned int count, x;
+    int count, x;
     count = 0;
     for (Case &c : this->cases[0]) {
         c.add_piece(BLACK, {0, count});

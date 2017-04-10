@@ -16,13 +16,13 @@ IA::IA() : first_move(true), team(GRAY) {
 }
 
 
-void IA::move(Movement m){
+void IA::move(Movement m) {
     if (this->first_move) {
         this->team = WHITE;
         this->first_move = false;
     }
     this->next_move_color =
-            static_cast<TERMINAL_STYLES>(this->b.cases[m.fin.x][m.fin.y].color-16);
+            static_cast<TERMINAL_STYLES>(this->b.cases[m.fin.x][m.fin.y].color - 16);
 }
 
 
