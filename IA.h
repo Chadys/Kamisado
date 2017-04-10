@@ -26,11 +26,12 @@ private:
     Node *MC_tree;
     static unsigned int max_depth;
     static unsigned int max_playouts;
+    std::map<TERMINAL_STYLES, unsigned int> finish;
 
-    int eval() const;
     static Movement best_move(const std::vector<Node*> &successors);
     std::vector<Movement> get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team) const;
-    static void playouts(Node *n);
+    void playouts(Node *n);
+    int check_end(Movement last_move);
 };
 
 

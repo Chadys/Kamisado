@@ -11,7 +11,9 @@ unsigned int IA::max_depth = UINT_MAX;
 unsigned int IA::max_playouts = UINT_MAX;
 double IA::UCT_const = 0.4;
 
-IA::IA() : first_move(true), team(GRAY) {}
+IA::IA() : first_move(true), team(GRAY) {
+    this->finish = {{BLACK, this->b.cases.size()}, {WHITE, 0}};
+}
 
 
 void IA::move(Movement m){
@@ -27,19 +29,6 @@ void IA::move(Movement m){
     this->next_move_color = static_cast<TERMINAL_STYLES>(new_c.color-16);
 }
 
-int IA::eval() const{
-    unsigned int start = 0, finish = this->b.cases.size(), stop = this->b.pions.size()/2;
-    if (this->team == WHITE){
-        start = stop;
-        stop = this->b.pions.size();
-        finish = 0;
-    }
-    for (int i = start; i < stop; ++i) {
-        if (this->b.pions[i]->pos.x == finish)
-            return 1;
-    }
-    return 0;
-};
 
 Movement IA::genmove() {
     Movement selected_move;
@@ -56,7 +45,7 @@ Movement IA::genmove() {
             /***selection***/
         //while chosen node is fully expanded, keep going down
         for (depth = 0, ptr = this->MC_tree;
-             ptr->moves_to.size() && ptr->children.size() == ptr->moves_to.size();
+             !ptr->moves_to.empty() && ptr->children.size() == ptr->moves_to.size();
              depth++) {
             ptr = *std::max_element(ptr->children.begin(), ptr->children.end(), Node::UCT_comp);
             this->move(ptr->from_move);
@@ -64,15 +53,20 @@ Movement IA::genmove() {
         //if terminal node selected
         if (!ptr->moves_to.size() || depth >= this->max_depth)
             break;
+
             /***expansion***/
         //create new child
         selected_move = ptr->moves_to[ptr->children.size()];
         child = new Node(ptr, depth+1, selected_move);
         ptr->children.push_back(child);
-        child->moves_to = this->get_moves(this->b.cases[selected_move.fin.x][selected_move.fin.y].color,
-                                          depth%2 ? invert_color(this->team) : this->team);
+        this->move(selected_move);
+        if(!check_end(selected_move))
+            child->moves_to = this->get_moves(this->b.cases[selected_move.fin.x][selected_move.fin.y].color,
+                                              depth%2 ? invert_color(this->team) : this->team);
+
             /***simulation***/
         playouts(child);
+
             /***backpropagation***/
         for(ptr = child; ptr != MC_tree; ptr = ptr->parent){
             ptr->parent->victories += ptr->victories;
@@ -134,5 +128,42 @@ std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team)
 }
 
 void IA::playouts(Node *n){
+    int result;
+    Case c = this->b.cases[n->from_move.fin.x][n->from_move.fin.y];
+    std::random_device rd;
+    std::mt19937 gen(rd());
 
+    if (n->moves_to.empty() || n->depth == this->max_depth){
+        result = check_end(n->from_move);
+        n->victories += result;
+        n->n_playouts++;
+        return;
+    }
+    for (unsigned int i = 0; i < max_playouts; ++i) {
+        TERMINAL_STYLES current_team = invert_color(c.pion.team);
+        TERMINAL_STYLES next_color = c.color;
+        std::vector<Movement> next_moves = n->moves_to;
+        unsigned int current_depth = n->depth;
+        Movement m;
+
+        while (!next_moves.empty() && current_depth < this->max_depth){
+            std::uniform_int_distribution<unsigned int> dis(0,next_moves.size()-1);
+            m = next_moves[dis(gen)];
+            this->move(m);
+            current_team = invert_color(current_team);
+            current_depth++;
+            if(!(result = check_end(m)))
+                next_moves = this->get_moves(this->b.cases[m.fin.x][m.fin.y].color, current_team);
+        }
+        n->victories += result;
+        n->n_playouts++;
+    }
+}
+
+int IA::check_end(Movement last_move){
+    if (last_move.fin.x == this->finish[this->team])
+        return 1;
+    if (last_move.fin.x == this->finish[invert_color(this->team)])
+        return -1;
+    return 0;
 }
