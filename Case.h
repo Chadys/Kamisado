@@ -10,8 +10,8 @@
 
 class Case {
 public:
-    Pion pion;
     TERMINAL_STYLES color;
+    Pion pion;
 
     Case(const TERMINAL_STYLES color_ = BG_GRAY, const Pion &pion_ = Pion::null);
     void add_piece(TERMINAL_STYLES team, coord c);

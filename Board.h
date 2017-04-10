@@ -16,7 +16,6 @@ public:
     std::vector<std::vector<Case>> cases;
     std::vector<Pion*> pions;
 
-    Board(){}
     void init(const char *file);
     void print() const;
     void move(Movement m);

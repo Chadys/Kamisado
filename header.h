@@ -78,4 +78,17 @@ inline TERMINAL_STYLES invert_color(TERMINAL_STYLES color){
     return WHITE;
 }
 
+
+
+template<class InputIterator, class T>
+InputIterator ptr_find (InputIterator first, InputIterator last, const T& val)
+{
+    while (first!=last) {
+        if (**first==val)
+            break;
+        ++first;
+    }
+    return first;
+}
+
 #endif //KAMISADO_HEADER_H
