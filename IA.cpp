@@ -8,7 +8,7 @@
 
 
 unsigned int IA::max_depth = UINT_MAX;
-unsigned int IA::max_playouts = UINT_MAX;
+unsigned int IA::max_playouts = 50;
 double IA::UCT_const = 0.4;
 
 IA::IA() : first_move(true), team(GRAY) {
@@ -23,6 +23,7 @@ void IA::move(Movement m) {
     }
     this->next_move_color =
             static_cast<TERMINAL_STYLES>(this->b.cases[m.fin.x][m.fin.y].color - 16);
+    this->b.move(m);
 }
 
 
@@ -57,7 +58,7 @@ Movement IA::genmove() {
         ptr->children.push_back(child);
         this->move(selected_move);
         if(!check_end(selected_move))
-            child->moves_to = this->get_moves(this->b.cases[selected_move.fin.x][selected_move.fin.y].color,
+            child->moves_to = this->get_moves(static_cast<TERMINAL_STYLES>(this->b.cases[selected_move.fin.x][selected_move.fin.y].color-16),
                                               depth%2 ? invert_color(this->team) : this->team);
 
             /***simulation***/
@@ -81,7 +82,6 @@ Movement IA::best_move(const std::vector<Node*> &successors){
 
 std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team) const{
     std::vector<Movement> moves;
-    Pion dummy(team, color, coord());
     coord pos;
     int front = team == BLACK ? 1 : -1;
     if (color == GRAY){
@@ -92,13 +92,13 @@ std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team)
         }
         return moves;
     }
-    auto p = std::find(team == BLACK ? this->b.pions.cbegin() : this->b.pions.cbegin()+8,
-                       this->b.pions.cend(), &dummy);
+    auto p = ptr_find(team == BLACK ? this->b.pions.cbegin() : this->b.pions.cbegin()+8,
+                       this->b.pions.cend(), Pion(team, color, coord()));
     pos = (*p)->pos;
     moves.push_back({pos, pos});
     // front line
     for(coord new_pos = {pos.x+front, pos.y};
-        new_pos.x >= 0 && new_pos.x < this->b.cases.size() &&
+        new_pos.x >= 0 && new_pos.x < static_cast<int>(this->b.cases.size()) &&
                 !this->b.cases[new_pos.x][new_pos.y].pion;
         new_pos = {new_pos.x+front, new_pos.y})
     {
@@ -106,7 +106,7 @@ std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team)
     }
     // left diag
     for(coord new_pos = {pos.x+front, pos.y-1};
-        new_pos.x >= 0 && new_pos.x < this->b.cases.size() && new_pos.y >= 0 &&
+        new_pos.x >= 0 && new_pos.x < static_cast<int>(this->b.cases.size()) && new_pos.y >= 0 &&
                 !this->b.cases[new_pos.x][new_pos.y].pion;
         new_pos = {new_pos.x+front, new_pos.y-1})
     {
@@ -114,7 +114,7 @@ std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team)
     }
     // right_diag
     for(coord new_pos = {pos.x+front, pos.y+1};
-        new_pos.x >= 0 && new_pos.x < this->b.cases.size() && new_pos.y < this->b.cases[0].size() &&
+        new_pos.x >= 0 && new_pos.x < static_cast<int>(this->b.cases.size()) && new_pos.y < static_cast<int>(this->b.cases[0].size()) &&
                 !this->b.cases[new_pos.x][new_pos.y].pion;
         new_pos = {new_pos.x+front, new_pos.y+1})
     {
@@ -137,29 +137,34 @@ void IA::playouts(Node *n){
     }
     for (unsigned int i = 0; i < max_playouts; ++i) {
         TERMINAL_STYLES current_team = invert_color(c.pion.team);
-        TERMINAL_STYLES next_color = c.color;
         std::vector<Movement> next_moves = n->moves_to;
         unsigned int current_depth = n->depth;
         Movement m;
+        std::vector<Movement> playout_moves;
 
         while (!next_moves.empty() && current_depth < this->max_depth){
+            unsigned int t = next_moves.size();
             std::uniform_int_distribution<unsigned int> dis(0,next_moves.size()-1);
             m = next_moves[dis(gen)];
             this->move(m);
+            playout_moves.push_back({m.fin, m.dep});
             current_team = invert_color(current_team);
             current_depth++;
             if(!(result = check_end(m)))
-                next_moves = this->get_moves(this->b.cases[m.fin.x][m.fin.y].color, current_team);
+                next_moves =this->get_moves(static_cast<TERMINAL_STYLES>(this->b.cases[m.fin.x][m.fin.y].color-16),
+                                            current_team);
         }
+        std::for_each(playout_moves.crbegin(), playout_moves.crend(),
+            [this](Movement m) mutable{ this->move(m); });
         n->victories += result;
         n->n_playouts++;
     }
 }
 
 int IA::check_end(Movement last_move){
-    if (last_move.fin.x == this->finish[this->team])
+    if (last_move.fin.x == static_cast<int>(this->finish[this->team]))
         return 1;
-    if (last_move.fin.x == this->finish[invert_color(this->team)])
+    if (last_move.fin.x == static_cast<int>(this->finish[invert_color(this->team)]))
         return -1;
     return 0;
 }

@@ -20,8 +20,8 @@ public:
     Movement genmove();
 
 private:
-    TERMINAL_STYLES team;
     bool first_move;
+    TERMINAL_STYLES team;
     TERMINAL_STYLES next_move_color = GRAY;
     Node *MC_tree;
     static unsigned int max_depth;

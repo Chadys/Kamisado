@@ -11,8 +11,8 @@
 
 class Pion {
 public:
-    TERMINAL_STYLES color;
     TERMINAL_STYLES team;
+    TERMINAL_STYLES color;
     coord pos;
     static const Pion null;
     static const std::vector<TERMINAL_STYLES> possible_colors;
