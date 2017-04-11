@@ -1,7 +1,6 @@
 #include "Display.h"
 
 void Display::init(){
-    SDL_Init(SDL_INIT_VIDEO);
     fenetre = SDL_CreateWindow(
         "Kamisado façon commercial",                  // window title
         SDL_WINDOWPOS_UNDEFINED,           // initial x position

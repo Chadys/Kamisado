@@ -10,6 +10,7 @@ static void manage_signals();
 static void handler(int signum);
 
 int main() {
+    SDL_Init(SDL_INIT_VIDEO);
     Display myDisplay;
     command_input(myDisplay);
     return 0;
