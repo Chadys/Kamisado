@@ -24,7 +24,7 @@ void Board::init(const char *file) {
 
 
 const std::map<char, TERMINAL_STYLES> Board::color_map =
-        {{'O', BG_CYAN}, {'B', BG_BLUE}, {'V', BG_PURPLE}, {'P', BG_BRIGHTRED},
+        {{'O', BG_CYAN}, {'B', BG_BLUE}, {'V', BG_PURPLE}, {'P', BG_MAGENTA},
          {'Y', BG_YELLOW}, {'R', BG_RED}, {'G', BG_GREEN}, {'M', BG_BROWN}};
 
 

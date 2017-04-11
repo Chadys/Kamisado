@@ -6,7 +6,7 @@
 
 
 unsigned int IA::max_depth = 50;
-unsigned int IA::max_playouts = 1;
+unsigned int IA::max_playouts = 50;
 double IA::UCT_const = 0.4;
 
 IA::IA() : first_move(true), team(GRAY) {}
@@ -50,8 +50,12 @@ Movement IA::genmove() {
             this->move(ptr->from_move);
         }
         //if terminal node selected
-        if (ptr->moves_to.empty() || depth >= this->max_depth)
+        if (ptr->moves_to.empty() || depth >= this->max_depth){
+            //go back to starting pos
+            for(; ptr != MC_tree; ptr = ptr->parent)
+                this->move({ptr->from_move.fin, ptr->from_move.dep});
             break;
+        }
 
             /***expansion***/
         //create new child
@@ -76,6 +80,7 @@ Movement IA::genmove() {
         }
     }
     selected_move =  best_move(MC_tree->children);
+    this->move(selected_move);
     delete this->MC_tree;
     return selected_move;
 }
@@ -99,14 +104,6 @@ std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team)
     auto p = ptr_find(team == BLACK ? this->b.pions.cbegin() : this->b.pions.cbegin()+8,
                        this->b.pions.cend(), Pion(team, color, coord()));
     pos = (*p)->pos;
-    // front line
-    for(coord new_pos = {pos.x+front, pos.y};
-        new_pos.x >= 0 && new_pos.x < static_cast<int>(this->b.cases.size()) &&
-                this->b.cases[new_pos.x][new_pos.y].pion == nullptr;
-        new_pos = {new_pos.x+front, new_pos.y})
-    {
-        moves.push_back({pos, new_pos});
-    }
     // pass
     moves.push_back({pos, pos});
     // left diag
@@ -125,7 +122,15 @@ std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team)
     {
         moves.push_back({pos, new_pos});
     }
-    // favor the biggest distances
+    // front line
+    for(coord new_pos = {pos.x+front, pos.y};
+        new_pos.x >= 0 && new_pos.x < static_cast<int>(this->b.cases.size()) &&
+                this->b.cases[new_pos.x][new_pos.y].pion == nullptr;
+        new_pos = {new_pos.x+front, new_pos.y})
+    {
+        moves.push_back({pos, new_pos});
+    }
+    // favor the biggest distances and the front
     std::reverse(moves.begin(),moves.end());
     return moves;
 }
@@ -156,6 +161,8 @@ void IA::playouts(Node *n){
             if(!(result = check_end(m.fin, current_team)))
                 next_moves =this->get_moves(static_cast<TERMINAL_STYLES>(this->b.cases[m.fin.x][m.fin.y].color-16),
                                             current_team);
+            else
+                next_moves.clear();
             current_team = invert_color(current_team);
             current_depth++;
         }
@@ -175,7 +182,7 @@ int IA::check_end(coord last_move, TERMINAL_STYLES last_play_team){
     return 0; //Game not finished
 }
 
-Movement IA::choose_playout_move(std::vector<Movement> moves, std::mt19937 gen){
+Movement IA::choose_playout_move(std::vector<Movement> &moves, std::mt19937 &gen){
     std::uniform_int_distribution<unsigned int> dis(0,moves.size()-1);
     return moves[dis(gen)];
 }
