@@ -7,6 +7,7 @@
 
 
 #include <vector>
+#include <cmath>
 #include "Movement.h"
 
 class Node {

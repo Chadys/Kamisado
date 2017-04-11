@@ -2,7 +2,6 @@
 // Created by julie on 07/04/17.
 //
 
-#include <climits>
 #include "Pion.h"
 
 Pion::Pion(TERMINAL_STYLES team_, TERMINAL_STYLES color_, coord pos_)
@@ -18,8 +17,4 @@ bool Pion::operator==(const Pion &pion_) const{
 
 bool Pion::operator!=(const Pion &pion_) const{
     return !(*this == pion_);
-}
-
-Pion::operator bool() const{
-    return *this != Pion::null;
 }

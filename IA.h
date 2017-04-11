@@ -6,6 +6,9 @@
 #define KAMISADO_IA_H
 
 
+#include <random>
+#include <algorithm>
+#include <climits>
 #include "Board.h"
 #include "Movement.h"
 #include "Node.h"
@@ -16,6 +19,7 @@ public:
     static double UCT_const;
 
     IA();
+    void init(const char *file);
     void move(Movement m);
     Movement genmove();
 
@@ -31,7 +35,8 @@ private:
     static Movement best_move(const std::vector<Node*> &successors);
     std::vector<Movement> get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team) const;
     void playouts(Node *n);
-    int check_end(Movement last_move);
+    int check_end(coord last_move, TERMINAL_STYLES last_play_team);
+    Movement choose_playout_move(std::vector<Movement> moves, std::mt19937 gen);
 };
 
 

@@ -20,7 +20,6 @@ public:
     Pion(TERMINAL_STYLES team_, TERMINAL_STYLES color_, coord pos_);
     bool operator==(const Pion &pion_) const;
     bool operator!=(const Pion &pion_) const;
-    explicit operator bool() const;
 };
 
 
