@@ -13,7 +13,6 @@ IA::IA() : first_move(true), team(GRAY), next_move_color(GRAY) {}
 
 void IA::init(const char *file){
     this->b.init(file);
-    this->finish = {{BLACK, this->b.cases.size()-1}, {WHITE, 0}};
 }
 
 
@@ -93,6 +92,7 @@ std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team)
     std::vector<Movement> moves;
     coord pos;
     int front = team == BLACK ? 1 : -1;
+
     if (color == GRAY){
         std::vector<Movement> tmp_moves;
         for (TERMINAL_STYLES col : Pion::possible_colors){
@@ -101,6 +101,7 @@ std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team)
         }
         return moves;
     }
+
     auto p = ptr_find(team == BLACK ? this->b.pions.cbegin() : this->b.pions.cbegin()+8,
                        this->b.pions.cend(), Pion(team, color, coord()));
     pos = (*p)->pos;
@@ -173,8 +174,8 @@ void IA::playouts(Node *n){
     }
 }
 
-int IA::check_end(coord last_move, TERMINAL_STYLES last_play_team){
-    if (last_move.x == static_cast<int>(this->finish[last_play_team])){
+int IA::check_end(coord &last_move, TERMINAL_STYLES last_play_team){
+    if (last_move.x == static_cast<int>(this->b.finish[last_play_team])){
         if (last_play_team == this->team) //IA won
             return 1;
         return -1; //IA lost
@@ -184,7 +185,7 @@ int IA::check_end(coord last_move, TERMINAL_STYLES last_play_team){
 
 Movement IA::choose_playout_move(std::vector<Movement> &moves, std::mt19937 &gen, TERMINAL_STYLES current_team){
     for (Movement& m : moves){
-        if(m.fin.x == static_cast<int>(this->finish[current_team]))
+        if(m.fin.x == static_cast<int>(this->b.finish[current_team]))
             return m;
     }
     std::uniform_int_distribution<unsigned int> dis(0,moves.size()-1);

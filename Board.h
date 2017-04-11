@@ -17,6 +17,7 @@ class Board {
 public:
     std::vector<std::vector<Case>> cases;
     std::vector<Pion*> pions;
+    std::map<TERMINAL_STYLES, unsigned int> finish;
 
     void init(const char *file);
     void print() const;

@@ -20,6 +20,7 @@ void Board::init(const char *file) {
     this->cases.push_back(line);
     stream.close();
     this->add_pieces();
+    this->finish = {{BLACK, this->cases.size()-1}, {WHITE, 0}};
 }
 
 

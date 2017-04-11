@@ -73,9 +73,7 @@ inline const char *codeFromStyle(enum TERMINAL_STYLES s)
 }
 
 inline TERMINAL_STYLES invert_color(TERMINAL_STYLES color){
-    if (color == WHITE)
-        return BLACK;
-    return WHITE;
+    return color == WHITE ? BLACK : WHITE;
 }
 
 
