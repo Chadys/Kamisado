@@ -20,6 +20,7 @@ int main() {
 
 void command_input(IA ia){
     std::string line, command;
+    bool init_done = false;
 
     while (std::getline(std::cin, line)){ //wait for user input
         std::istringstream sstream(line);
@@ -29,28 +30,33 @@ void command_input(IA ia){
             return;
         }
         if (command == "init"){
-            ia.init("./default_board.kms");
-            std::cout << "= \n\n";
-            continue;
+            if(!init_done) {
+                ia.init("./default_board.kms");
+                init_done = true;
+                std::cout << "= \n\n";
+                continue;
+            }
         }
         if (command == "name"){
             std::cout << "= Yolo\n\n";
             continue;
         }
-        if (command == "move"){
-            Movement m;
-            sstream >> m.dep.x;
-            sstream >> m.dep.y;
-            sstream >> m.fin.x;
-            sstream >> m.fin.y;
-            ia.move(m);
-            std::cout << "= \n\n";
-            continue;
-        }
-        if (command == "genmove"){
-            Movement m = ia.genmove();
-            std::cout << "= " << m << "\n\n";
-            continue;
+        if(init_done){
+            if (command == "move"){
+                    Movement m;
+                    sstream >> m.dep.x;
+                    sstream >> m.dep.y;
+                    sstream >> m.fin.x;
+                    sstream >> m.fin.y;
+                    ia.move(m);
+                    std::cout << "= \n\n";
+                    continue;
+            }
+            if (command == "genmove"){
+                Movement m = ia.genmove();
+                std::cout << "= " << m << "\n\n";
+                continue;
+            }
         }
         std::cout << "= ?\n\n";
     }

@@ -24,6 +24,7 @@ int main() {
 
 void command_input(Arbiter a){
     std::string line, command;
+    bool init_done = false;
 
     while (std::getline(std::cin, line)){ //wait for user input
         std::istringstream sstream(line);
@@ -33,11 +34,14 @@ void command_input(Arbiter a){
             return;
         }
         if (command == "init"){
-            a.init("./default_board.kms");
-            std::cout << "= \n\n";
-            continue;
+            if(!init_done) {
+                a.init("./default_board.kms");
+                init_done = true;
+                std::cout << "= \n\n";
+                continue;
+            }
         }
-        if (command == "move"){
+        if (init_done && command == "move"){
             Movement m;
             sstream >> m.dep.x;
             sstream >> m.dep.y;
