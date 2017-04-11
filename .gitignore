@@ -5,6 +5,7 @@ Makefile
 
 # exe
 Kamisado*
-
+DisplayKamisado*
 # IDE
 .idea
+
