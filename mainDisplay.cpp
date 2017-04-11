@@ -1,6 +1,7 @@
 #include <sstream>
 #include <iostream>
 #include <csignal>
+#include "SDL2/SDL.h"
 #include "Board.h"
 #include "Display.h"
 
@@ -16,9 +17,12 @@ int main() {
 
 void command_input(Display myDisplay){
     std::string line, command;
-
+    int ugh = 0;
     manage_signals();
     while (std::getline(std::cin, line)){ //wait for user input
+        //SDL_PollEvent(NULL);
+        //SDL_PumpEvents();
+
         std::istringstream sstream(line);
         sstream >> command;
         if (command == "quit") {
@@ -28,9 +32,10 @@ void command_input(Display myDisplay){
         }
         if (command == "init"){
             std::cout << "Create Window\n";
-            myDisplay.b.init("./default_board.kms");
             myDisplay.init();
             myDisplay.GraphBoard();
+            myDisplay.test();
+            ugh = 1;
             std::cout << "= \n\n";
             continue;
         }
@@ -44,11 +49,20 @@ void command_input(Display myDisplay){
             sstream >> m.dep.y;
             sstream >> m.fin.x;
             sstream >> m.fin.y;
+            myDisplay.b.move(m);
+            myDisplay.GraphBoard();
+            myDisplay.test();
+            myDisplay.b.print();
             std::cout << "= \n\n";
             continue;
         }
         if (command == "genmove"){
+            myDisplay.test();
             continue;
+        }
+        else{
+            myDisplay.test();
+            std::cout<<"test\n";
         }
     }
 }
@@ -56,17 +70,16 @@ void command_input(Display myDisplay){
 void manage_signals(){
     struct sigaction sa;
     sa.sa_handler = handler;
-    if (sigaction(SIGABRT, &sa, NULL) == -1 |
-        sigaction(SIGFPE, &sa, NULL) == -1 |
-        sigaction(SIGILL, &sa, NULL) == -1 |
-        sigaction(SIGINT, &sa, NULL) == -1 |
-        sigaction(SIGSEGV, &sa, NULL) == -1 |
-        sigaction(SIGTERM, &sa, NULL) == -1 |
-        sigaction(SIGBUS, &sa, NULL) == -1 |
-        sigaction(SIGKILL, &sa, NULL) == -1 |
-        sigaction(SIGPIPE, &sa, NULL) == -1 |
-        sigaction(SIGQUIT, &sa, NULL) == -1 |
-        sigaction(SIGSYS, &sa, NULL) == -1);
+    if ((sigaction(SIGABRT, &sa, NULL) == -1) |
+        (sigaction(SIGFPE, &sa, NULL) == -1) |
+        (sigaction(SIGILL, &sa, NULL) == -1) |
+        (sigaction(SIGINT, &sa, NULL) == -1) |
+        (sigaction(SIGSEGV, &sa, NULL) == -1) |
+        (sigaction(SIGTERM, &sa, NULL) == -1) |
+        (sigaction(SIGBUS, &sa, NULL) == -1) |
+        (sigaction(SIGPIPE, &sa, NULL) == -1) |
+        (sigaction(SIGQUIT, &sa, NULL) == -1) |
+        (sigaction(SIGSYS, &sa, NULL) == -1)){}
 }
 
 inline void handler(int sig)

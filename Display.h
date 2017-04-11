@@ -16,9 +16,11 @@ public:
     int tour = 1;
     void quit();
     void init();
+    void test();
     void GraphBoard();
 private:
     SDL_Window *fenetre;
+    SDL_Renderer* renderer;
 };
 
 #endif //KAMISADO_DISPLAY_H
