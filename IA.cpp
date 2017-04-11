@@ -5,11 +5,11 @@
 #include "IA.h"
 
 
-unsigned int IA::max_depth = 50;
-unsigned int IA::max_playouts = 50;
+unsigned int IA::max_depth = 1000;
+unsigned int IA::max_playouts = 500;
 double IA::UCT_const = 0.4;
 
-IA::IA() : first_move(true), team(GRAY) {}
+IA::IA() : first_move(true), team(GRAY), next_move_color(GRAY) {}
 
 void IA::init(const char *file){
     this->b.init(file);
@@ -155,7 +155,7 @@ void IA::playouts(Node *n){
         std::vector<Movement> playout_moves;
 
         while (!next_moves.empty() && current_depth < this->max_depth){
-            m = choose_playout_move(next_moves, gen);
+            m = choose_playout_move(next_moves, gen, current_team);
             this->move(m);
             playout_moves.push_back({m.fin, m.dep});
             if(!(result = check_end(m.fin, current_team)))
@@ -182,7 +182,11 @@ int IA::check_end(coord last_move, TERMINAL_STYLES last_play_team){
     return 0; //Game not finished
 }
 
-Movement IA::choose_playout_move(std::vector<Movement> &moves, std::mt19937 &gen){
+Movement IA::choose_playout_move(std::vector<Movement> &moves, std::mt19937 &gen, TERMINAL_STYLES current_team){
+    for (Movement& m : moves){
+        if(m.fin.x == static_cast<int>(this->finish[current_team]))
+            return m;
+    }
     std::uniform_int_distribution<unsigned int> dis(0,moves.size()-1);
     return moves[dis(gen)];
 }

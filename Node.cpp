@@ -7,7 +7,9 @@
 
 
 Node::Node(Node *parent_, unsigned int depth_, Movement from_move_)
-        : parent(parent_), depth(depth_), from_move(from_move_) {}
+        : parent(parent_), children(std::vector<Node *>()),
+          victories(0), n_playouts(0), depth(depth_),
+          from_move(from_move_), moves_to(std::vector<Movement>()) {}
 
 Node::~Node(){
     for (auto child : this->children)
@@ -19,7 +21,7 @@ bool Node::UCT_comp(const Node *n1, const Node *n2){
 }
 
 bool Node::best_comp(const Node *n1, const Node *n2){
-    return n1->victories/n1->n_playouts < n2->victories/n2->n_playouts;
+    return n1->victories/static_cast<int>(n1->n_playouts) < n2->victories/static_cast<int>(n2->n_playouts);
 }
 
 double Node::UTC_eval() const{

@@ -20,6 +20,7 @@ int main() {
 
 void command_input(IA ia){
     std::string line, command;
+    IA ia2;
 
     while (std::getline(std::cin, line)){ //wait for user input
         std::istringstream sstream(line);
