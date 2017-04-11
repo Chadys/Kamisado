@@ -8,6 +8,8 @@
 
 #include <vector>
 #include <map>
+#include <fstream>
+#include <iostream>
 #include "Case.h"
 #include "Movement.h"
 

@@ -2,7 +2,6 @@
 // Created by julie on 09/04/17.
 //
 
-#include <cmath>
 #include "Node.h"
 #include "IA.h"
 

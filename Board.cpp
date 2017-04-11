@@ -2,8 +2,6 @@
 // Created by julie on 07/04/17.
 //
 
-#include <fstream>
-#include <iostream>
 #include "Board.h"
 
 void Board::init(const char *file) {
@@ -34,15 +32,15 @@ void Board::add_pieces() {
     int count, x;
     count = 0;
     for (Case &c : this->cases[0]) {
-        c.add_piece(BLACK, {0, count});
-        this->pions.push_back(&c.pion);
+        c.pion = new Pion(BLACK,static_cast<TERMINAL_STYLES>(c.color-16), {0, count});
+        this->pions.push_back(c.pion);
         count++;
     }
     count = 0;
     x = this->cases.size()-1;
     for (Case &c : this->cases[x]) {
-        c.add_piece(WHITE, {x, count});
-        this->pions.push_back(&c.pion);
+        c.pion = new Pion(WHITE,static_cast<TERMINAL_STYLES>(c.color-16), {x, count});
+        this->pions.push_back(c.pion);
         count++;
     }
 }
@@ -52,10 +50,10 @@ void Board::print() const{
     for(auto &row : this->cases){
         for (const Case &c : row) {
             std::cout << codeFromStyle(BOLD) << codeFromStyle(c.color);
-            if (c.pion)
-                std::cout << codeFromStyle(c.pion.team) << '['
-                          << codeFromStyle(c.pion.color) << codeFromStyle(c.color) << codeFromStyle(BOLD) << 'o'
-                          << codeFromStyle(c.pion.team) << codeFromStyle(c.color) << codeFromStyle(BOLD) << ']';
+            if (c.pion != nullptr)
+                std::cout << codeFromStyle(c.pion->team) << '['
+                          << codeFromStyle(c.pion->color) << codeFromStyle(c.color) << codeFromStyle(BOLD) << 'o'
+                          << codeFromStyle(c.pion->team) << codeFromStyle(c.color) << codeFromStyle(BOLD) << ']';
             else
                 std::cout << "   ";
         }
@@ -67,7 +65,9 @@ void Board::print() const{
 void Board::move(Movement m){
     Case &old_c = this->cases[m.dep.x][m.dep.y];
     Case &new_c = this->cases[m.fin.x][m.fin.y];
-    new_c.pion = old_c.pion;
-    new_c.pion.pos = m.fin;
-    old_c.pion = Pion::null;
+    if(&old_c != &new_c) {
+        new_c.pion = old_c.pion;
+        new_c.pion->pos = m.fin;
+        old_c.pion = nullptr;
+    }
 }
