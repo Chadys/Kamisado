@@ -21,7 +21,7 @@ void Display::GraphBoard(){
     SDL_Rect r;
     int countc, countl;
     // We must call SDL_CreateRenderer in order for draw calls to affect this window.
-    renderer = SDL_CreateRenderer(fenetre, -1, 0);
+    renderer = SDL_CreateRenderer(fenetre, -1, SDL_RENDERER_SOFTWARE);
     // Select the color for drawing. It is set to red here.
     SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
     // Clear the entire screen to our selected color.
@@ -46,10 +46,14 @@ void Display::GraphBoard(){
     SDL_RenderFillRect(renderer, &r);
     //SDL_RenderPresent(renderer);
     
-    if (tour == 1)
+    if (tour == 1){
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    else
+        tour = 0;
+    }
+    else{
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        tour = 1;
+    }
     r.x = 60;
     r.y = 60;
     r.w = 560;
@@ -102,21 +106,21 @@ void Display::GraphBoard(){
                 r.h = 40;
 
                 if (c.pion->color == CYAN)
-                    SDL_SetRenderDrawColor(renderer, 255, 140, 0, 255);
+                    SDL_SetRenderDrawColor(renderer, 200, 100, 0, 255);
                 else if (c.pion->color == BLUE)
-                    SDL_SetRenderDrawColor(renderer, 0, 47, 167, 255);
+                    SDL_SetRenderDrawColor(renderer, 0, 30, 130, 255);
                 else if (c.pion->color == PURPLE)
-                    SDL_SetRenderDrawColor(renderer, 139, 105, 180, 255);
+                    SDL_SetRenderDrawColor(renderer, 100, 80, 160, 255);
                 else if (c.pion->color == MAGENTA)
-                    SDL_SetRenderDrawColor(renderer, 252, 138, 233, 255);
+                    SDL_SetRenderDrawColor(renderer, 200, 120, 210, 255);
                 else if (c.pion->color == YELLOW)
-                    SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+                    SDL_SetRenderDrawColor(renderer, 200, 200, 0, 255);
                 else if (c.pion->color == RED)
-                    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+                    SDL_SetRenderDrawColor(renderer, 200, 0, 0, 255);
                 else if (c.pion->color == GREEN)
-                    SDL_SetRenderDrawColor(renderer, 50, 205, 50, 255);
+                    SDL_SetRenderDrawColor(renderer, 20, 150, 20, 255);
                 else if (c.pion->color == BROWN)
-                    SDL_SetRenderDrawColor(renderer, 160, 82, 45, 255);
+                    SDL_SetRenderDrawColor(renderer, 130, 50, 30, 255);
                 else
                     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
                 SDL_RenderFillRect(renderer, &r);
