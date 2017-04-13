@@ -28,11 +28,11 @@ private:
     TERMINAL_STYLES team;
     TERMINAL_STYLES next_move_color;
     Node *MC_tree;
-    static unsigned int max_depth;
-    static unsigned int max_playouts;
+    unsigned int max_depth;
+    unsigned int max_playouts;
 
     static Movement best_move(const std::vector<Node*> &successors);
-    std::vector<Movement> get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team) const;
+    std::vector<Movement> get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team, bool eval = false) const;
     void playouts(Node *n);
     int check_end(coord &last_move, TERMINAL_STYLES last_play_team);
     double eval(coord &last_move, TERMINAL_STYLES last_play_team);

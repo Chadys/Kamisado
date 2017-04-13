@@ -21,7 +21,7 @@ bool Node::UCT_comp(const Node *n1, const Node *n2){
 }
 
 bool Node::best_comp(const Node *n1, const Node *n2){
-    return n1->victories/static_cast<int>(n1->n_playouts) < n2->victories/static_cast<int>(n2->n_playouts);
+    return n1->victories/n1->n_playouts < n2->victories/n2->n_playouts;
 }
 
 double Node::UTC_eval() const{
