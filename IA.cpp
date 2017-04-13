@@ -39,6 +39,11 @@ Movement IA::genmove() {
     }
     this->MC_tree = new Node;
     this->MC_tree->moves_to = this->get_moves(this->next_move_color, this->team);
+    if(this->MC_tree->moves_to.size() == 1){
+        selected_move = this->MC_tree->moves_to[0];
+        delete this->MC_tree;
+        return selected_move;
+    }
     while (true){
             /***selection***/
         //while chosen node is fully expanded, keep going down
