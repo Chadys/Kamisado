@@ -102,7 +102,7 @@ std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team)
         return moves;
     }
 
-    auto p = ptr_find(team == BLACK ? this->b.pions.cbegin() : this->b.pions.cbegin()+8,
+    auto p = ptr_find(team == BLACK ? this->b.pions.cbegin() : this->b.pions.cbegin()+this->b.pions.size()/2,
                        this->b.pions.cend(), Pion(team, color, coord()));
     pos = (*p)->pos;
     // pass
@@ -137,12 +137,12 @@ std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team)
 }
 
 void IA::playouts(Node *n){
-    int result;
+    double result;
     Case &c = this->b.cases[n->from_move.fin.x][n->from_move.fin.y];
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    result = check_end(n->from_move.fin, c.pion->team);
+    result = eval(n->from_move.fin, c.pion->team);
     if (n->moves_to.empty() || n->depth == this->max_depth){
         n->victories += result;
         n->n_playouts++;
@@ -159,13 +159,13 @@ void IA::playouts(Node *n){
             m = choose_playout_move(next_moves, gen, current_team);
             this->move(m);
             playout_moves.push_back({m.fin, m.dep});
-            if(!(result = check_end(m.fin, current_team)))
-                next_moves =this->get_moves(static_cast<TERMINAL_STYLES>(this->b.cases[m.fin.x][m.fin.y].color-16),
+            current_team = invert_color(current_team);
+            current_depth++;
+            if(fabs(result = eval(m.fin, current_team)) != 1)
+                next_moves = this->get_moves(static_cast<TERMINAL_STYLES>(this->b.cases[m.fin.x][m.fin.y].color-16),
                                             current_team);
             else
                 next_moves.clear();
-            current_team = invert_color(current_team);
-            current_depth++;
         }
         std::for_each(playout_moves.crbegin(), playout_moves.crend(),
             [this](Movement m) mutable{ this->move(m); });
@@ -190,4 +190,23 @@ Movement IA::choose_playout_move(std::vector<Movement> &moves, std::mt19937 &gen
     }
     std::uniform_int_distribution<unsigned int> dis(0,moves.size()-1);
     return moves[dis(gen)];
+}
+
+double IA::eval(coord &last_move, TERMINAL_STYLES last_play_team){
+    double test_end = this->check_end(last_move, last_play_team);
+    std::vector<Movement> my_moves, enemy_moves;
+    TERMINAL_STYLES enemy_team = invert_color(this->team);
+
+    if (test_end)
+        return test_end;
+    my_moves = this->get_moves(GRAY, this->team);
+    enemy_moves = this->get_moves(GRAY, enemy_team);
+
+    for (Movement m :my_moves)
+        if (m.fin.x == static_cast<int>(this->b.finish[this->team]))
+            test_end++;
+    for (Movement m : enemy_moves)
+        if (m.fin.x == static_cast<int>(this->b.finish[enemy_team]))
+            test_end--;
+    return test_end/(this->b.pions.size()/2);
 }

@@ -35,6 +35,7 @@ private:
     std::vector<Movement> get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team) const;
     void playouts(Node *n);
     int check_end(coord &last_move, TERMINAL_STYLES last_play_team);
+    double eval(coord &last_move, TERMINAL_STYLES last_play_team);
     Movement choose_playout_move(std::vector<Movement> &moves, std::mt19937 &gen, TERMINAL_STYLES current_team);
 };
 
