@@ -9,3 +9,6 @@ DisplayKamisado*
 # IDE
 .idea
 
+# temporary script
+*.py
+

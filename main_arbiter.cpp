@@ -1,24 +1,28 @@
 //
+// Created by julie on 11/04/17.
+//
+
+//
 // Created by julie on 07/04/17.
 //
 
 #include <sstream>
 #include <iostream>
 #include <csignal>
-#include "IA.h"
+#include "Arbiter.h"
 
-void command_input(IA ia);
+void command_input(Arbiter a);
 static void manage_signals();
 static void handler(int signum);
 
 int main() {
-    IA ia;
+    Arbiter a;
     manage_signals();
-    command_input(ia);
+    command_input(a);
     return 0;
 }
 
-void command_input(IA ia){
+void command_input(Arbiter a){
     std::string line, command;
     bool init_done = false;
 
@@ -31,32 +35,20 @@ void command_input(IA ia){
         }
         if (command == "init"){
             if(!init_done) {
-                ia.init("./default_board.kms");
+                a.init("./default_board.kms");
                 init_done = true;
                 std::cout << "= \n\n";
                 continue;
             }
         }
-        if (command == "name"){
-            std::cout << "= Yolo\n\n";
+        if (init_done && command == "move"){
+            Movement m;
+            sstream >> m.dep.x;
+            sstream >> m.dep.y;
+            sstream >> m.fin.x;
+            sstream >> m.fin.y;
+            std::cout << "= " << a.move(m) << "\n\n";
             continue;
-        }
-        if(init_done){
-            if (command == "move"){
-                    Movement m;
-                    sstream >> m.dep.x;
-                    sstream >> m.dep.y;
-                    sstream >> m.fin.x;
-                    sstream >> m.fin.y;
-                    ia.move(m);
-                    std::cout << "= \n\n";
-                    continue;
-            }
-            if (command == "genmove"){
-                Movement m = ia.genmove();
-                std::cout << "= " << m << "\n\n";
-                continue;
-            }
         }
         std::cout << "= ?\n\n";
     }

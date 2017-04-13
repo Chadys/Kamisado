@@ -7,7 +7,9 @@
 
 
 Node::Node(Node *parent_, unsigned int depth_, Movement from_move_)
-        : parent(parent_), depth(depth_), from_move(from_move_) {}
+        : parent(parent_), children(std::vector<Node *>()),
+          victories(0), n_playouts(0), depth(depth_),
+          from_move(from_move_), moves_to(std::vector<Movement>()) {}
 
 Node::~Node(){
     for (auto child : this->children)

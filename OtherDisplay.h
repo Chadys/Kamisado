@@ -15,6 +15,7 @@ class OtherDisplay {
 public:
     std::string val = "";
     Board b;
+    int rot;
     int tour = 1;
     std::string name1 = "";
     std::string name2 = "";

@@ -14,8 +14,8 @@ class Node {
 public:
     Node *parent;
     std::vector<Node *> children;
-    unsigned int victories;
-    unsigned int n_playouts;
+    double victories;
+    double n_playouts;
     unsigned int depth;
     Movement from_move; //move done to obtain this node
     std::vector<Movement> moves_to; //moves that can be done from this node

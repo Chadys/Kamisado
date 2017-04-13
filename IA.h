@@ -15,7 +15,6 @@
 
 class IA {
 public:
-    Board b;
     static double UCT_const;
 
     IA();
@@ -24,19 +23,20 @@ public:
     Movement genmove();
 
 private:
+    Board b;
     bool first_move;
     TERMINAL_STYLES team;
-    TERMINAL_STYLES next_move_color = GRAY;
+    TERMINAL_STYLES next_move_color;
     Node *MC_tree;
-    static unsigned int max_depth;
-    static unsigned int max_playouts;
-    std::map<TERMINAL_STYLES, unsigned int> finish;
+    unsigned int max_depth;
+    unsigned int max_playouts;
 
     static Movement best_move(const std::vector<Node*> &successors);
-    std::vector<Movement> get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team) const;
+    std::vector<Movement> get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team, bool eval = false) const;
     void playouts(Node *n);
-    int check_end(coord last_move, TERMINAL_STYLES last_play_team);
-    Movement choose_playout_move(std::vector<Movement> moves, std::mt19937 gen);
+    int check_end(coord &last_move, TERMINAL_STYLES last_play_team);
+    double eval(coord &last_move, TERMINAL_STYLES last_play_team);
+    Movement choose_playout_move(std::vector<Movement> &moves, std::mt19937 &gen, TERMINAL_STYLES current_team);
 };
 
 
