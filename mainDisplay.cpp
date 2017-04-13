@@ -33,7 +33,6 @@ void execute_input(){
         exit(EXIT_SUCCESS);
     }
     if (command == "init"){
-        std::cout << "ugh\n";
     
         std::cout << "= \n\n";
     }
