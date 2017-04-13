@@ -106,8 +106,6 @@ std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team,
     auto p = ptr_find(team == BLACK ? this->b.pions.cbegin() : this->b.pions.cbegin()+this->b.pions.size()/2,
                        this->b.pions.cend(), Pion(team, color, coord()));
     pos = (*p)->pos;
-    // pass
-    moves.push_back({pos, pos});
     // left diag
     for(coord new_pos = {pos.x+front, pos.y-1};
         new_pos.x >= 0 && new_pos.x < static_cast<int>(this->b.cases.size()) && new_pos.y >= 0 &&
@@ -132,6 +130,9 @@ std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team,
     {
         moves.push_back({pos, new_pos});
     }
+    // pass only if no other possibility
+    if(moves.empty())
+        moves.push_back({pos, pos});
     // favor the biggest distances and the front
     std::reverse(moves.begin(),moves.end());
     return moves;

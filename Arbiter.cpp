@@ -50,6 +50,16 @@ bool Arbiter::check_legal(Movement m) const{
     if (m.dep.x*front > m.fin.x*front)
         return false;
 
+    //check piece didn't pass if it could move
+    if (m.dep.x == m.fin.x && m.dep.y == m.fin.y){
+        const std::vector<Case> &line = this->b.cases[m.dep.x+front];
+        if(line[m.dep.y].pion == nullptr || //possibility to move front
+           (m.dep.y > 0 && line[m.dep.y-1].pion == nullptr) || //diag left
+           (m.dep.y < static_cast<int>(line.size())-1 && line[m.dep.y+1].pion == nullptr)) //diag right
+            return false;
+        return true;
+    }
+
     //check no piece on the way and piece could move there
     while (m.dep.x != m.fin.x || m.dep.y != m.fin.y){
         m.dep.x += front;
@@ -60,6 +70,7 @@ bool Arbiter::check_legal(Movement m) const{
         if (this->b.cases[m.dep.x][m.dep.y].pion != nullptr)
             return false;
     }
+
     return true;
 }
 
