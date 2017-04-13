@@ -1,55 +1,29 @@
 #include <sstream>
 #include <iostream>
 #include <csignal>
-#include "SDL2/SDL.h"
 #include "Board.h"
-#include "Display.h"
-#include <ctime>
-#include <boost/asio.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include "OtherDisplay.h"
+#include <SFML/Graphics.hpp>
 
 void command_input();
+//void song();
+void nameManager(std::string name1, std::string name2);
+void execute_input();
 void manage_signals();
 static void handler(int signum);
-static void print(const boost::system::error_code&);
-static void GraphBoardEv();
-Display myDisplay;
+OtherDisplay myDisplay;
 
 int main() {
-    SDL_Init(SDL_INIT_EVERYTHING);
     manage_signals();
-    // boost::asio::io_service io;
-    // boost::asio::deadline_timer t(io, boost::posix_time::seconds(3));
-    // t.async_wait(&print);
-    // io.run();
-    command_input();
+    sf::Thread thread(&command_input);
+    thread.launch();
+    myDisplay.init();
     return 0;
 }
 
-void print(const boost::system::error_code&)
-{
-    command_input();
-    std::cout << "UGH" << std::endl;
-    boost::asio::io_service io;
-    boost::asio::deadline_timer t(io, boost::posix_time::seconds(5));
-    t.async_wait(&print);
-    io.run();
-}
 
-void GraphBoardEv(){
-    SDL_Event evenements;
-    while(1){
-        SDL_PollEvent(&evenements);
-        if(evenements.type == SDL_QUIT){
-            myDisplay.quit();
-            exit(EXIT_SUCCESS);
-        }
-    }
-}
-
-void command_input(){
-
-    std::string line, command;
+void execute_input(){
+    std::string line, command, names;
     std::getline(std::cin, line); 
     std::istringstream sstream(line);
     sstream >> command;
@@ -59,41 +33,77 @@ void command_input(){
         exit(EXIT_SUCCESS);
     }
     if (command == "init"){
-        std::cout << "Create Window\n";
-        myDisplay.init();
-        myDisplay.GraphBoard();
-        myDisplay.test();
+        std::cout << "ugh\n";
+    
         std::cout << "= \n\n";
     }
-    if (command == "name"){
-        std::cout << "= Yolo\n\n";
+    if (command == "names"){
+        //sstream >> names;
+    std::getline(sstream, myDisplay.name1, ';');
+    std::getline(sstream, myDisplay.name2);
+        std::cout << "= \n\n";
     }
     if (command == "move"){
+
         Movement m;
         sstream >> m.dep.x;
         sstream >> m.dep.y;
         sstream >> m.fin.x;
         sstream >> m.fin.y;
         myDisplay.b.move(m);
-        myDisplay.GraphBoard();
-        myDisplay.test();
-        myDisplay.b.print();
+        if(myDisplay.tour)
+            myDisplay.tour = 0;
+        else
+            myDisplay.tour = 1;
+        // sf::Thread threadsong(&song);
+        // threadsong.launch();
         std::cout << "= \n\n";
     }
-    if (command == "genmove"){
-        myDisplay.test();
+    if (command == "endgame"){
+        sstream >> myDisplay.val;
     }
-    else{
-        myDisplay.test();
-        std::cout<<"test\n";
-    }
-    boost::asio::io_service io;
-    boost::asio::deadline_timer t(io, boost::posix_time::seconds(1));
-    t.async_wait(&print);
-    io.run();
-        myDisplay.GraphBoard();
-    
 }
+void command_input(){
+    while(1){
+        execute_input();
+    }
+}
+
+// void song(){
+//     sf::SoundBuffer buffer;
+//     // on charge quelque chose dans le buffer...
+//     if(myDisplay.tour == 1){
+//         std::cout << "test" << std::endl;
+//         buffer.loadFromFile("1.ogg");
+//     }
+//     else{
+//         std::cout << "test0" << std::endl;
+//         buffer.loadFromFile("0.ogg");
+//     }
+
+//     sf::Sound sound;
+//     sound.setBuffer(buffer);
+//     sound.play();
+// }
+
+// void nameManager(std::string name1, std::string name2){
+//     int act = 1;
+//     int size = names.size();
+//     for(int i = 0; i < size; i++){
+//         if (act == 1){
+//             if (names[i] != ';'){
+//                 myDisplay.name1 = myDisplay.name1 + names[i];
+//             }
+//             else{
+//                 act = 2;
+//             }
+//         }else{
+//             myDisplay.name2 = myDisplay.name2 + names[i];
+//         }
+//     }
+//     std::cout<<myDisplay.name1<<std::endl;
+//     std::cout<<myDisplay.name2<<std::endl;
+// }
 
 void manage_signals(){
     struct sigaction sa;
