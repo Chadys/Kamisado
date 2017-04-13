@@ -2,6 +2,7 @@
 #include <iostream>
 #include <csignal>
 #include "Board.h"
+#include "Movement.h"
 #include "OtherDisplay.h"
 #include <SFML/Graphics.hpp>
 
