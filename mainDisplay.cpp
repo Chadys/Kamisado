@@ -16,9 +16,16 @@ OtherDisplay myDisplay;
 
 int main() {
     manage_signals();
-    sf::Thread thread(&command_input);
-    thread.launch();
-    myDisplay.init();
+    std::string line, command, names;
+    std::getline(std::cin, line); 
+    std::istringstream sstream(line);
+    sstream >> command;
+    if (command == "init"){
+        sf::Thread thread(&command_input);
+        thread.launch();
+        myDisplay.init();
+        std::cout << "= \n\n";
+    }
     return 0;
 }
 
@@ -34,13 +41,13 @@ void execute_input(){
         exit(EXIT_SUCCESS);
     }
     if (command == "init"){
-    
+        myDisplay.init();
         std::cout << "= \n\n";
     }
     if (command == "names"){
         //sstream >> names;
-    std::getline(sstream, myDisplay.name1, ';');
-    std::getline(sstream, myDisplay.name2);
+        std::getline(sstream, myDisplay.name1, ';');
+        std::getline(sstream, myDisplay.name2);
         std::cout << "= \n\n";
     }
     if (command == "move"){
@@ -51,16 +58,19 @@ void execute_input(){
         sstream >> m.fin.x;
         sstream >> m.fin.y;
         myDisplay.b.move(m);
-        if(myDisplay.tour)
-            myDisplay.tour = 0;
-        else
-            myDisplay.tour = 1;
-        // sf::Thread threadsong(&song);
-        // threadsong.launch();
+        if(myDisplay.tour){
+            myDisplay.sound1.play();
+        }
+        else{
+            myDisplay.sound2.play();
+        }
+        myDisplay.tour = !myDisplay.tour;
         std::cout << "= \n\n";
     }
     if (command == "endgame"){
         sstream >> myDisplay.val;
+        myDisplay.sound3.play();
+        std::cout << "= \n\n";
     }
 }
 void command_input(){
@@ -68,42 +78,6 @@ void command_input(){
         execute_input();
     }
 }
-
-// void song(){
-//     sf::SoundBuffer buffer;
-//     // on charge quelque chose dans le buffer...
-//     if(myDisplay.tour == 1){
-//         std::cout << "test" << std::endl;
-//         buffer.loadFromFile("1.ogg");
-//     }
-//     else{
-//         std::cout << "test0" << std::endl;
-//         buffer.loadFromFile("0.ogg");
-//     }
-
-//     sf::Sound sound;
-//     sound.setBuffer(buffer);
-//     sound.play();
-// }
-
-// void nameManager(std::string name1, std::string name2){
-//     int act = 1;
-//     int size = names.size();
-//     for(int i = 0; i < size; i++){
-//         if (act == 1){
-//             if (names[i] != ';'){
-//                 myDisplay.name1 = myDisplay.name1 + names[i];
-//             }
-//             else{
-//                 act = 2;
-//             }
-//         }else{
-//             myDisplay.name2 = myDisplay.name2 + names[i];
-//         }
-//     }
-//     std::cout<<myDisplay.name1<<std::endl;
-//     std::cout<<myDisplay.name2<<std::endl;
-// }
 
 void manage_signals(){
     struct sigaction sa;

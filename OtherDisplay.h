@@ -13,10 +13,14 @@
 
 class OtherDisplay {
 public:
+    sf::Sound sound1;
+    sf::Sound sound2;
+    sf::Sound sound3;
     std::string val = "";
+    int tailleWin = 70;
+    int ugh = 1;
     Board b;
-    int rot;
-    int tour = 1;
+    bool tour = true;
     std::string name1 = "";
     std::string name2 = "";
     void quit();
@@ -26,6 +30,8 @@ public:
     void GraphBoard();
 private:
      sf::RenderWindow window;
+     float rotate = 0;
+     float rot = 0.01;
 };
 
 #endif //KAMISADO_OTHERDISPLAY_H

@@ -11,4 +11,4 @@ DisplayKamisado*
 
 # temporary script
 *.py
-
+__pycache__

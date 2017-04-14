@@ -2,26 +2,43 @@
 
 
 void OtherDisplay::init(){
-    window.create(sf::VideoMode(680, 680), "Kamisado non Commercial", sf::Style::Close);
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 8;
+    this->window.create(sf::VideoMode(680, 680), "Kamisado non Commercial", sf::Style::Close, settings);
     b.init("./default_board.kms");
+    sf::SoundBuffer buffer1;
+    sf::SoundBuffer buffer2;
+    sf::SoundBuffer buffer3;
+
+    buffer1.loadFromFile("0.ogg");
+    buffer2.loadFromFile("1.ogg");
+    buffer3.loadFromFile("Victoire.ogg");
+
+    sound1.setBuffer(buffer1);
+    sound2.setBuffer(buffer2);
+    sound3.setBuffer(buffer3);
+
     // on fait tourner le programme jusqu'à ce que la fenêtre soit fermée
-    while (window.isOpen())
+    while (this->window.isOpen())
     {
         // on inspecte tous les évènements de la fenêtre qui ont été émis depuis la précédente itération
         sf::Event event;
-        while (window.pollEvent(event))
+        while (this->window.pollEvent(event))
         {
             // évènement "fermeture demandée" : on ferme la fenêtre
             if (event.type == sf::Event::Closed)
-                window.close();
+                this->window.close();
         }
-        window.clear(sf::Color(20, 20, 20));
+        this->window.clear(sf::Color(20, 20, 20));
         GraphBoard();
-        window.display();
+        this->window.display();
     }
 }
 
 void OtherDisplay::GraphBoard(){
+    if(rotate > 360){
+        rotate = 0;
+    }
     int countl, countc;
     sf::Font font;
     font.loadFromFile("Japanese.ttf");
@@ -48,29 +65,25 @@ void OtherDisplay::GraphBoard(){
     sf::RectangleShape r(sf::Vector2f(630, 630));
     r.setPosition(25, 25);
     r.setFillColor(sf::Color(84, 69, 67));
-    window.draw(r);
+    this->window.draw(r);
 
     t2.setPosition(25, 20);
-    window.draw(t2);
+    this->window.draw(t2);
 
     t3.setPosition(680-37-t3.getLocalBounds().width, 625);
-    window.draw(t3);
+    this->window.draw(t3);
 
 
     r.setSize(sf::Vector2f(566, 566));
     r.setPosition(57, 57);
     r.setFillColor(sf::Color(200, 173, 127));
-    window.draw(r);
+    this->window.draw(r);
 
     r.setSize(sf::Vector2f(560, 560));
     r.setPosition(60, 60);
-    if (tour == 1){
-        r.setFillColor(sf::Color(0, 0, 0));
-    }
-    else{
-        r.setFillColor(sf::Color(255, 255, 255));
-    }
-    window.draw(r);
+    r.setFillColor(sf::Color(0, 0, 0));
+    this->window.draw(r);
+    
     countc = 0;
     for(auto &row : b.cases){
         countl = 0;
@@ -78,7 +91,7 @@ void OtherDisplay::GraphBoard(){
             if (c.color == BG_CYAN)
                 r.setFillColor(sf::Color(255, 140, 0, 255));
             else if (c.color == BG_BLUE)
-                r.setFillColor(sf::Color(0, 47, 167, 255));
+                r.setFillColor(sf::Color(30, 100, 250, 255));
             else if (c.color == BG_PURPLE)
                 r.setFillColor(sf::Color(139, 105, 180, 255));
             else if (c.color == BG_MAGENTA)
@@ -95,24 +108,28 @@ void OtherDisplay::GraphBoard(){
                 r.setFillColor(sf::Color(0, 0, 0, 255));
             r.setPosition(62 + (70*countl), 62 + (70*countc));
             r.setSize(sf::Vector2f(66, 66));
-            window.draw(r);
+            this->window.draw(r);
+            shape.setRotation(90);
             if(c.pion != nullptr){
                 if(c.pion->team == BLACK){
                     shape.setOutlineColor(sf::Color(0, 0, 0, 255));
                     shape.setFillColor(sf::Color(50, 50, 50, 255));
+                    shape.rotate(rotate += rot);
+
                 }
                 else if (c.pion->team == WHITE){
                     shape.setOutlineColor(sf::Color(255, 255, 255, 255));
                     shape.setFillColor(sf::Color(220, 220, 220, 255));
+                    shape.rotate(360 - (rotate += rot));
                 }
-                shape.setPosition(70+50 + (70*countl), 70 + (70*countc));
+                shape.setPosition(45+50 + (70*countl), 95 + (70*countc));
 
 
 
                 if (c.pion->color == CYAN)
                     t.setColor(sf::Color(200, 100, 0, 255));
                 else if (c.pion->color == BLUE)
-                    t.setColor(sf::Color(0, 30, 130, 255));
+                    t.setColor(sf::Color(20, 40, 170, 255));
                 else if (c.pion->color == PURPLE)
                     t.setColor(sf::Color(100, 80, 160, 255));
                 else if (c.pion->color == MAGENTA)
@@ -127,10 +144,11 @@ void OtherDisplay::GraphBoard(){
                     t.setColor(sf::Color(130, 50, 30, 255));
                 else
                     t.setColor(sf::Color(0, 0, 0, 255));
-                shape.setRotation(90);
-                window.draw(shape);
+                sf::FloatRect textRect2 = shape.getLocalBounds();
+                shape.setOrigin(textRect2.left + textRect2.width/2.0f,textRect2.top  + textRect2.height/2.0f);
+                this->window.draw(shape);
                 t.setPosition(70+14 + (70*countl), 72 + (70*countc)); 
-                window.draw(t);  
+                this->window.draw(t);  
             }
             countl ++;
         }
@@ -140,39 +158,43 @@ void OtherDisplay::GraphBoard(){
     sf::Text tv;
     tv.setFont(font2);
     tv.setString(name1);
-    tv.setCharacterSize(70);
-    if(tour == 1)
-        tv.setColor(sf::Color::White);
-    else
-        tv.setColor(sf::Color::Black);
+    if(tailleWin < 70 || tailleWin > 80)
+        ugh *= -1;
+    tv.setCharacterSize(tailleWin += ugh);
+    tv.setColor(sf::Color::White);
+    
     if(val == "0"){
         tv.setString(name1);
         sf::FloatRect textRect = tv.getLocalBounds();
         tv.setOrigin(textRect.left + textRect.width/2.0f,textRect.top  + textRect.height/2.0f);
         tv.setPosition(sf::Vector2f(340, 310));
-        window.draw(tv);
+        this->window.draw(tv);
         tv.setString("Won !");
         textRect = tv.getLocalBounds();
         tv.setOrigin(textRect.left + textRect.width/2.0f,textRect.top  + textRect.height/2.0f);
         tv.setPosition(sf::Vector2f(340, 370));
-        window.draw(tv);
+        this->window.draw(tv);
+        if(rot < 2)
+            rot += 0.00005;
     }
     else if(val == "1"){
         tv.setString(name2);
         sf::FloatRect textRect = tv.getLocalBounds();
         tv.setOrigin(textRect.left + textRect.width/2.0f,textRect.top  + textRect.height/2.0f);
         tv.setPosition(sf::Vector2f(340, 310));
-        window.draw(tv);
+        this->window.draw(tv);
         tv.setString("Won !");
         textRect = tv.getLocalBounds();
         tv.setOrigin(textRect.left + textRect.width/2.0f,textRect.top  + textRect.height/2.0f);
         tv.setPosition(sf::Vector2f(340, 370));
-        window.draw(tv);
+        this->window.draw(tv);
+        if(rot < 2)
+            rot += 0.00005;
     }
 
 }
 
 void OtherDisplay::quit(){
-    window.close();
+    this->window.close();
 }
 
