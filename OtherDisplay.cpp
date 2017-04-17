@@ -10,9 +10,9 @@ void OtherDisplay::init(){
     sf::SoundBuffer buffer2;
     sf::SoundBuffer buffer3;
 
-    buffer1.loadFromFile("0.ogg");
-    buffer2.loadFromFile("1.ogg");
-    buffer3.loadFromFile("Victoire.ogg");
+    buffer1.loadFromFile("./Extras/0.ogg");
+    buffer2.loadFromFile("./Extras/1.ogg");
+    buffer3.loadFromFile("./Extras/Victoire.ogg");
 
     sound1.setBuffer(buffer1);
     sound2.setBuffer(buffer2);
@@ -41,13 +41,13 @@ void OtherDisplay::GraphBoard(){
     }
     int countl, countc;
     sf::Font font;
-    font.loadFromFile("Japanese.ttf");
+    font.loadFromFile("./Extras/Japanese.ttf");
     sf::Text t;
     t.setFont(font);
     t.setString(L"w");
 
     sf::Font font2;
-    font2.loadFromFile("UbuntuMono-B.ttf");
+    font2.loadFromFile("./Extras/UbuntuMono-B.ttf");
     sf::Text t2;
     sf::Text t3;
     t2.setFont(font2);
