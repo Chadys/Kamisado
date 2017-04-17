@@ -6,6 +6,7 @@
 #define KAMISADO_HEADER_H
 
 
+
 struct coord{
     int x;
     int y;

@@ -3,9 +3,30 @@ project(Kamisado)
 
 set(CMAKE_CXX_STANDARD 14)
 
+
 SET( CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -g -Wextra -Wall" )
 set(SOURCE_FILES_MCTS main_ia.cpp header.h Board.cpp Board.h Case.cpp Case.h Pion.cpp Pion.h IA.cpp IA.h Movement.cpp Movement.h Node.cpp Node.h)
-add_executable(Kamisado_IA_MCTS ${SOURCE_FILES_MCTS})
-
+set(SOURCE_FILES_DISPLAY main_Display.cpp header.h Board.cpp Board.h Case.cpp Case.h Pion.cpp Pion.h OtherDisplay.cpp OtherDisplay.h Movement.cpp Movement.h)
 set(SOURCE_FILES_ARBITER main_arbiter.cpp header.h Board.cpp Board.h Case.cpp Case.h Pion.cpp Pion.h Movement.cpp Movement.h Arbiter.cpp Arbiter.h)
 add_executable(Kamisado_Arbiter ${SOURCE_FILES_ARBITER})
+add_executable(Kamisado_IA_MCTS ${SOURCE_FILES_MCTS})
+add_executable(DisplayKamisado ${SOURCE_FILES_DISPLAY})
+
+find_package(SDL2 REQUIRED)
+string(STRIP ${SDL2_INCLUDE_DIRS} SDL2_INCLUDE_DIRS)
+string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
+include_directories(${SDL2_INCLUDE_DIRS})
+find_package(Boost COMPONENTS system filesystem REQUIRED)
+include_directories(${Boost_INCLUDE_DIR})
+link_directories(${Boost_LIBRARY_DIR})
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
+#Find any version 2.X of SFML
+#See the FindSFML.cmake file for additional details and instructions
+find_package(SFML 2 REQUIRED system window graphics network audio)
+if(SFML_FOUND)
+  include_directories(${SFML_INCLUDE_DIR})
+  
+endif()
+
+target_link_libraries(DisplayKamisado ${SDL2_LIBRARIES} ${Boost_LIBRARIES} ${SFML_LIBRARIES})
+
