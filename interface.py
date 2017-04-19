@@ -113,6 +113,8 @@ def get_arb(command_, timeout_):
     #print('REPONSE ARBITRE -get arb: [{}]'.format(res))
     if res:
         res = int(''.join(res))
+    else:
+        return None
     if res >= 0 and res <= 2:
         #print('in')
         return res
