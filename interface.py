@@ -13,7 +13,6 @@ PROG_DIS = 3
 GREEN = "\033[0;32m"
 RESET = "\033[0;0m"
 
-PROGRAMS_NAMES = ['IA1', 'IA2', 'ARBITRATOR', 'VISUALISER']
 
 PROCESSES = []
 
@@ -21,13 +20,13 @@ def end(ia_):
     """"Senc close command to all process and print winner"""
     if ia_ != -1:
         if communicate(PROCESSES[PROG_DIS], 'endgame ' + str(ia_) + '\n', 2.0, except_none=True) != "OK":
-            print(PROGRAMS_NAMES[PROG_DIS] + ' failed for [endgame] command.')
+            print('DISPLAYER failed for [endgame] command.')
         time.sleep(5)
 
     print("Exiting... ({})".format(ia_))
     for i, process in enumerate(PROCESSES):
         if communicate(process, 'quit\n', 0.5, except_none=True) != "OK":
-            print(PROGRAMS_NAMES[i] + ' failed for [quit] command.\n')
+            print('PROG_{} failed for [quit] command.\n'.format(i))
         process['process'].kill()
     exit()
 
@@ -40,9 +39,9 @@ def complicated(bool1, bool2):
         return int(bool1 is not True)
     return 2
 
-def init_processes():
+def init_processes(length):
     """Send init command to all processes"""
-    for i in range(1, 5):
+    for i in range(1, length):
         print('{} : {}'.format(i - 1, sys.argv[i]))
         process = Popen(sys.argv[i], bufsize=0,
                         stdin=PIPE,
@@ -54,13 +53,13 @@ def init_processes():
         PROCESSES.append({'process':process, 'nbsr':nbsr, 'id':i - 1})
 
     if not communicate(PROCESSES[PROG_ARB], 'init\n', 2, except_none=True) == "OK":
-        print(PROGRAMS_NAMES[PROG_ARB] + ' failed for [init] command.')
+        print('ARBITRATOR failed for [init] command.')
 
     val1 = communicate(PROCESSES[PROG_IA1], 'init\n', 2, except_none=True) == "OK"
     val2 = communicate(PROCESSES[PROG_IA2], 'init\n', 2, except_none=True) == "OK"
     for i, val in enumerate([val1, val2]):
         if not val:
-            print(PROGRAMS_NAMES[i] + ' failed for [init] command.')
+            print('PROG_{} failed for [init] command.'.format(i))
     check = complicated(val1, val2)
     if check < 2:
         end(check)
@@ -71,16 +70,17 @@ def init_processes():
     val2 = name2 is not None
     for i, val in enumerate([val1, val2]):
         if not val:
-            print(PROGRAMS_NAMES[i] + ' failed for [name] command.')
+            print('PROG_{} failed for [name] command.'.format(i))
     check = complicated(val1, val2)
     if check < 2:
         end(check)
     PROCESSES[PROG_IA1]['name'] = name1
     PROCESSES[PROG_IA2]['name'] = name2 + "test"
 
-    if communicate(PROCESSES[PROG_DIS], 'names {};{}\n'.format(name1, name2), 2.0, except_none=True) != "OK":
-        print(PROGRAMS_NAMES[PROG_DIS] + ' failed for [names] command.')
-        end(-1)
+    if length == 5 :
+        if communicate(PROCESSES[PROG_DIS], 'names {};{}\n'.format(name1, name2), 2.0, except_none=True) != "OK":
+            print('DISPLAYER failed for [names] command.')
+            end(-1)
 
 def communicate(program_, command_, timeout_, except_none=False):
     """Send command to a program and return his answer"""
@@ -118,8 +118,12 @@ def get_arb(command_, timeout_):
         return res
     return None
 
-def main_loop(c_ia):
+def main_loop(use_display, c_ia):
     """Boucle principale du programme"""
+    if use_display:
+        print('i use display')
+    else:
+        print('nope')
     c_adv = int(not c_ia)
     while True:
         time.sleep(0.5)
@@ -147,10 +151,11 @@ def main_loop(c_ia):
         else:
             print("IA{} OK".format(c_adv))
 
-        print('sending [move {}] to DISPLAYER'.format(res_ia))
-        if communicate(PROCESSES[PROG_DIS], 'move ' + res_ia + '\n', 0.5, except_none=True) != "OK":
-            print(PROGRAMS_NAMES[PROG_DIS] + " failed for [move] command\n")
-            end(-1)
+        if use_display:
+            print('sending [move {}] to DISPLAYER'.format(res_ia))
+            if communicate(PROCESSES[PROG_DIS], 'move ' + res_ia + '\n', 0.5, except_none=True) != "OK":
+                print('DISPLAYER failed for [move] command\n')
+                end(-1)
 
         c_ia = c_adv
         c_adv = int(not c_ia)
@@ -158,9 +163,11 @@ def main_loop(c_ia):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 5:
-        print('Require 4 arguments (IA1, IA2, Arbitrator)')
+    print(sys.argv)
+    length = len(sys.argv)
+    if length < 4 or length > 5:
+        print('Arguments : IA1, IA2, Arbitrator, Display (facultative)')
         exit()
-    init_processes()
+    init_processes(length)
     print('\033[1;31mfinished'+RESET)
-    main_loop(0)
+    main_loop(bool(length - 4), 0)
