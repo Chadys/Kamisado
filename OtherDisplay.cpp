@@ -12,7 +12,7 @@ void OtherDisplay::init(){
 
     buffer1.loadFromFile("./Extras/0.ogg");
     buffer2.loadFromFile("./Extras/1.ogg");
-    buffer3.loadFromFile("./Extras/Victoire.ogg");
+    buffer3.loadFromFile("./Extras/Victoire2.ogg");
 
     sound1.setBuffer(buffer1);
     sound2.setBuffer(buffer2);
