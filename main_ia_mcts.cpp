@@ -5,20 +5,20 @@
 #include <sstream>
 #include <iostream>
 #include <csignal>
-#include "IA.h"
+#include "IA_MCTS.h"
 
-void command_input(IA ia);
+void command_input(IA_MCTS ia);
 static void manage_signals();
 static void handler(int signum);
 
 int main() {
-    IA ia;
+    IA_MCTS ia;
     manage_signals();
     command_input(ia);
     return 0;
 }
 
-void command_input(IA ia){
+void command_input(IA_MCTS ia){
     std::string line, command;
     bool init_done = false;
 

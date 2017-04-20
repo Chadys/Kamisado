@@ -4,7 +4,7 @@ Makefile
 !CMakeLists.txt
 
 # exe
-Kamisado*
+*Kamisado*
 
 # IDE
 .idea

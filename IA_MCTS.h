@@ -2,8 +2,8 @@
 // Created by julie on 08/04/17.
 //
 
-#ifndef KAMISADO_IA_H
-#define KAMISADO_IA_H
+#ifndef KAMISADO_IA_MCTS_H
+#define KAMISADO_IA_MCTS_H
 
 
 #include <random>
@@ -13,11 +13,11 @@
 #include "Movement.h"
 #include "Node.h"
 
-class IA {
+class IA_MCTS {
 public:
     static double UCT_const;
 
-    IA();
+    IA_MCTS();
     void init(const char *file);
     void move(Movement m);
     Movement genmove();
@@ -40,4 +40,4 @@ private:
 };
 
 
-#endif //KAMISADO_IA_H
+#endif //KAMISADO_IA_MCTS_H

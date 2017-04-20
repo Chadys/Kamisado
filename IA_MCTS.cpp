@@ -2,19 +2,19 @@
 // Created by julie on 08/04/17.
 //
 
-#include "IA.h"
+#include "IA_MCTS.h"
 
 
-double IA::UCT_const = 0.4;
+double IA_MCTS::UCT_const = 0.4;
 
-IA::IA() : first_move(true), team(GRAY), next_move_color(GRAY), max_depth(100), max_playouts(5) {}
+IA_MCTS::IA_MCTS() : first_move(true), team(GRAY), next_move_color(GRAY), max_depth(100), max_playouts(5) {}
 
-void IA::init(const char *file){
+void IA_MCTS::init(const char *file){
     this->b.init(file);
 }
 
 
-void IA::move(Movement m) {
+void IA_MCTS::move(Movement m) {
     if (this->first_move) {
         this->team = WHITE;
         this->first_move = false;
@@ -26,7 +26,7 @@ void IA::move(Movement m) {
 }
 
 
-Movement IA::genmove() {
+Movement IA_MCTS::genmove() {
     Movement selected_move;
     Node *ptr, *child;
     unsigned int depth;
@@ -89,11 +89,11 @@ Movement IA::genmove() {
     return selected_move;
 }
 
-Movement IA::best_move(const std::vector<Node*> &successors){
+Movement IA_MCTS::best_move(const std::vector<Node*> &successors){
     return (*std::max_element(successors.cbegin(), successors.cend(), Node::best_comp))->from_move;
 }
 
-std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team, bool eval) const{
+std::vector<Movement> IA_MCTS::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team, bool eval) const{
     std::vector<Movement> moves;
     coord pos;
     int front = team == BLACK ? 1 : -1;
@@ -143,7 +143,7 @@ std::vector<Movement> IA::get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team,
     return moves;
 }
 
-void IA::playouts(Node *n){
+void IA_MCTS::playouts(Node *n){
     double result;
     Case &c = this->b.cases[n->from_move.fin.x][n->from_move.fin.y];
     std::random_device rd;
@@ -175,22 +175,22 @@ void IA::playouts(Node *n){
                 next_moves.clear();
         }
         std::for_each(playout_moves.crbegin(), playout_moves.crend(),
-            [&, this, current_depth, current_team](Movement m) mutable { this->move(m); });
+            [&, this, current_depth, current_team](Movement mov) mutable { this->move(mov); });
         n->victories += result;
         n->n_playouts++;
     }
 }
 
-int IA::check_end(coord &last_move, TERMINAL_STYLES last_play_team){
+int IA_MCTS::check_end(coord &last_move, TERMINAL_STYLES last_play_team){
     if (last_move.x == static_cast<int>(this->b.finish[last_play_team])){
-        if (last_play_team == this->team) //IA won
+        if (last_play_team == this->team) //IA_MCTS won
             return 1;
-        return -1; //IA lost
+        return -1; //IA_MCTS lost
     }
     return 0; //Game not finished
 }
 
-Movement IA::choose_playout_move(std::vector<Movement> &moves, std::mt19937 &gen, TERMINAL_STYLES current_team){
+Movement IA_MCTS::choose_playout_move(std::vector<Movement> &moves, std::mt19937 &gen, TERMINAL_STYLES current_team){
     for (Movement& m : moves){
         if(m.fin.x == static_cast<int>(this->b.finish[current_team]))
             return m;
@@ -199,7 +199,7 @@ Movement IA::choose_playout_move(std::vector<Movement> &moves, std::mt19937 &gen
     return moves[dis(gen)];
 }
 
-double IA::eval(coord &last_move, TERMINAL_STYLES last_play_team){
+double IA_MCTS::eval(coord &last_move, TERMINAL_STYLES last_play_team){
     double test_end = this->check_end(last_move, last_play_team);
     std::vector<Movement> my_moves, enemy_moves;
     TERMINAL_STYLES enemy_team = invert_color(this->team);
