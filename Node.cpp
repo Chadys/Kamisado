@@ -3,7 +3,7 @@
 //
 
 #include "Node.h"
-#include "IA.h"
+#include "IA_MCTS.h"
 
 
 Node::Node(Node *parent_, unsigned int depth_, Movement from_move_)
@@ -26,5 +26,5 @@ bool Node::best_comp(const Node *n1, const Node *n2){
 
 double Node::UTC_eval() const{
     return (this->victories/this->n_playouts) +
-            IA::UCT_const*sqrt(log(this->parent->n_playouts)/this->n_playouts);
+            IA_MCTS::UCT_const*sqrt(log(this->parent->n_playouts)/this->n_playouts);
 }
