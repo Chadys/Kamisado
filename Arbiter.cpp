@@ -5,17 +5,17 @@
 #include "Arbiter.h"
 
 
-Arbiter::Arbiter() : next_team(BLACK), next_move_color(GRAY), play_ended(false) {}
+Arbiter::Arbiter() : next_team(BLACK), next_move_color(GRAY), game_ended(0) {}
 
 void Arbiter::init(const char *file){
     this->b.init(file);
 }
 
 unsigned short Arbiter::move(Movement &m) {
-    if(play_ended || !this->check_legal(m))
+    if(this->game_ended || !this->check_legal(m))
         return 0;
     if(this->check_end(m.fin)) {
-        this->play_ended = true;
+        this->game_ended = this->next_team == BLACK ? 1 : 2;
         return 2;
     }
     this->next_move_color =
@@ -74,9 +74,12 @@ bool Arbiter::check_legal(Movement m) const{
     return true;
 }
 
-
 bool Arbiter::check_end(coord &last_move){
     if (last_move.x == static_cast<int>(this->b.finish[this->next_team]))
             return true; //Player that just played won
     return false; //Game not finished
+}
+
+void Arbiter::resign(){
+    this->game_ended = this->next_team == BLACK ? 1 : 2;
 }

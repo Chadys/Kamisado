@@ -2,7 +2,7 @@
 // Created by julie on 20/04/17.
 //
 
-#include "IA_minmax.h"
+#include "IA_Minimax.h"
 
 IA_Minimax::IA_Minimax() : first_move(true), team(GRAY), next_move_color(GRAY){}
 

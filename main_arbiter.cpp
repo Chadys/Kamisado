@@ -50,6 +50,14 @@ void command_input(Arbiter a){
             std::cout << "= " << a.move(m) << "\n\n";
             continue;
         }
+        if (init_done && command == "gamestate"){
+            std::cout << "= " << a.game_ended << "\n\n";
+            continue;
+        }
+        if (init_done && command == "resign"){
+            std::cout << "= " << a.game_ended << "\n\n";
+            continue;
+        }
         std::cout << "= ?\n\n";
     }
 }

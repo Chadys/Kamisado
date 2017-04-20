@@ -7,12 +7,12 @@
 #include <csignal>
 #include "IA_Minimax.h"
 
-void command_input(IA_MCTS ia);
+void command_input(IA_Minimax ia);
 static void manage_signals();
 static void handler(int signum);
 
 int main() {
-    IA_MCTS ia;
+    IA_Minimax ia;
     manage_signals();
     command_input(ia);
     return 0;

@@ -10,16 +10,17 @@
 
 class Arbiter {
 public:
+    unsigned short game_ended;
 
     Arbiter();
     void init(const char *file);
     unsigned short move(Movement &m);
+    void resign();
 
 private:
     Board b;
     TERMINAL_STYLES next_team;
     TERMINAL_STYLES next_move_color;
-    bool play_ended;
 
     bool check_legal(Movement m) const;
     bool check_end(coord &last_move);
