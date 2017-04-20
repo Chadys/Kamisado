@@ -84,13 +84,15 @@ double IA_Minimax::min(TERMINAL_STYLES adv_team, int profondeur)
 
 Movement IA_Minimax::genmove()
 {
+    int profondeur = 5;
     if (this->first_move)
     {
         this->team = BLACK;
         this->first_move = false;
+        profondeur = 2;
     }
 
-    int profondeur = 5;
+
     TERMINAL_STYLES current_team = this->team;
     auto possible_moves = this->get_moves(this->next_move_color, current_team);
     Movement selected_move;

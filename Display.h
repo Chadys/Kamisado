@@ -2,8 +2,8 @@
 // Created by Alexis on 12/04/17.
 //
 
-#ifndef KAMISADO_OTHERDISPLAY_H
-#define KAMISADO_OTHERDISPLAY_H
+#ifndef KAMISADO_DISPLAY_H
+#define KAMISADO_DISPLAY_H
 
 #include "Case.h"
 #include "Board.h"
@@ -31,7 +31,7 @@ public:
 private:
      sf::RenderWindow window;
      float rotate = 0;
-     float rot = 0.01;
+     float rot = 0;
 };
 
-#endif //KAMISADO_OTHERDISPLAY_H
+#endif //KAMISADO_DISPLAY_H
