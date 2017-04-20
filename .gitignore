@@ -10,6 +10,4 @@ Kamisado*
 # IDE
 .idea
 
-# temporary script
-*.py
 __pycache__
