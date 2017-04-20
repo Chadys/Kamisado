@@ -78,9 +78,10 @@ def init_processes(length):
     PROCESSES[PROG_IA2]['name'] = name2 + "test"
 
     if length == 5 :
+        if not communicate(PROCESSES[PROG_DIS], 'init\n', 2, except_none=True) == "OK":
+            print('DISPLAYER failed for [init] command.')
         if communicate(PROCESSES[PROG_DIS], 'names {};{}\n'.format(name1, name2), 2.0, except_none=True) != "OK":
             print('DISPLAYER failed for [names] command.')
-            end(-1)
 
 def communicate(program_, command_, timeout_, except_none=False):
     """Send command to a program and return his answer"""
@@ -142,8 +143,13 @@ def main_loop(use_display, c_ia):
         if not res_arb or res_arb < 0 or res_arb > 2:
             end(-1)
         if res_arb == 0:
+            print("IA{} failed for [genmove] command (illegal move)\n".format(c_ia))
             end(c_adv)
         elif res_arb == 2:
+            if use_display:
+                print('sending [move {}] to DISPLAYER'.format(res_ia))
+                if communicate(PROCESSES[PROG_DIS], 'move ' + res_ia + '\n', 0.5, except_none=True) != "OK":
+                    print('DISPLAYER failed for [move] command\n')
             end(c_ia)
 
         print('\033[1;34mSending [move {}] to IA{}'.format(res_ia, c_adv)+RESET)
@@ -157,7 +163,6 @@ def main_loop(use_display, c_ia):
             print('sending [move {}] to DISPLAYER'.format(res_ia))
             if communicate(PROCESSES[PROG_DIS], 'move ' + res_ia + '\n', 0.5, except_none=True) != "OK":
                 print('DISPLAYER failed for [move] command\n')
-                end(-1)
 
         c_ia = c_adv
         c_adv = int(not c_ia)
