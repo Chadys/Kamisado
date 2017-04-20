@@ -12,7 +12,6 @@ struct coord{
     int y;
 };
 
-
 // All options to customize a terminal
 enum TERMINAL_STYLES{
     RESET,

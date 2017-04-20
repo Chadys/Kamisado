@@ -1,7 +1,7 @@
-#include "OtherDisplay.h"
+#include "Display.h"
 
 
-void OtherDisplay::init(){
+void Display::init(){
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
     this->window.create(sf::VideoMode(680, 680), "Kamisado non Commercial", sf::Style::Close, settings);
@@ -35,7 +35,7 @@ void OtherDisplay::init(){
     }
 }
 
-void OtherDisplay::GraphBoard(){
+void Display::GraphBoard(){
     if(rotate > 360){
         rotate = 0;
     }
@@ -194,7 +194,7 @@ void OtherDisplay::GraphBoard(){
 
 }
 
-void OtherDisplay::quit(){
+void Display::quit(){
     this->window.close();
 }
 

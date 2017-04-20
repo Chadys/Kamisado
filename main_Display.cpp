@@ -3,7 +3,7 @@
 #include <csignal>
 #include "Board.h"
 #include "Movement.h"
-#include "OtherDisplay.h"
+#include "Display.h"
 #include <SFML/Graphics.hpp>
 
 void command_input();
@@ -12,7 +12,7 @@ void nameManager(std::string name1, std::string name2);
 void execute_input();
 void manage_signals();
 static void handler(int signum);
-OtherDisplay myDisplay;
+Display myDisplay;
 
 int main() {
     manage_signals();

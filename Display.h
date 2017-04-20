@@ -11,7 +11,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
-class OtherDisplay {
+class Display {
 public:
     sf::Sound sound1;
     sf::Sound sound2;

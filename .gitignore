@@ -2,9 +2,10 @@
 [cC][mM]ake*
 Makefile
 !CMakeLists.txt
+!cmake_modules
 
 # exe
-*Kamisado*
+Kamisado*
 
 # IDE
 .idea
