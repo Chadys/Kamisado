@@ -7,7 +7,6 @@
 #include <SFML/Graphics.hpp>
 
 void command_input();
-//void song();
 void nameManager(std::string name1, std::string name2);
 void execute_input();
 void manage_signals();
@@ -45,7 +44,6 @@ void execute_input(){
         std::cout << "= \n\n";
     }
     if (command == "names"){
-        //sstream >> names;
         std::getline(sstream, myDisplay.name1, ';');
         std::getline(sstream, myDisplay.name2);
         std::cout << "= \n\n";
