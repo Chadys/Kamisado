@@ -5,7 +5,7 @@
 #include "Arbiter.h"
 
 
-Arbiter::Arbiter() : next_team(BLACK), next_move_color(GRAY), game_ended(0) {}
+Arbiter::Arbiter() : game_ended(0), next_team(BLACK), next_move_color(GRAY) {}
 
 void Arbiter::init(const char *file){
     this->b.init(file);
@@ -36,6 +36,10 @@ bool Arbiter::check_legal(Movement m) const{
             m.dep.y < 0 || m.dep.y >= static_cast<int>(this->b.cases[0].size()) ||
             m.fin.x < 0 || m.fin.x >= static_cast<int>(this->b.cases.size()) ||
             m.fin.y < 0 || m.fin.y >= static_cast<int>(this->b.cases[0].size()))
+        return false;
+
+    //check that there is a piece on starting pos
+    if(this->b.cases[m.dep.x][m.dep.y].pion == nullptr)
         return false;
 
     //check piece of correct color moved
