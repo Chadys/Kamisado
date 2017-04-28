@@ -37,7 +37,7 @@ You just need to have a program looping over stdin and writing to stdout in reac
 
 |           Commands          |      Response                      |                                                     Other action needed                                                     |
 |:---------------------------:|:----------------------------------:|:---------------------------------------------------------------------------------------------------------------------------:|
-|            init\n           | = \n\n                             | Initialise your board and anything else your program needs to function                                                      |
+|            init\n           | = \n\n                             | Initialize your board and anything else your program needs to function                                                      |
 |            name\n           | = PROGRAM_NAME\n\n                 |                                                                                                                             |
 |      move R1 C1 R2 C2\n     | = \n\n                             | Update your board so that move has been played                                                                              |
 |          genmove\n          | = R1 C1 R2 C2\n or = resign\n\n    | Calls your AI to provide to move you want to do depending on the current board state (and update your board with that move) |
