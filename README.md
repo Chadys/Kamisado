@@ -35,8 +35,8 @@ python3 interface.py Kamisado_IA_Ramdom Kamisado_IA_MCTS Kamisado_Referee Kamisa
 
 You just need to have a program looping over stdin and writing to stdout in reaction to these commands :
 
-|           Commands          |      Response                      |                                                     Other action needed                                                     |
-|:---------------------------:|:----------------------------------:|:---------------------------------------------------------------------------------------------------------------------------:|
+|           Commands          |      Response                      |     Other action needed             |
+|:---------------------------:|:----------------------------------:|:-----------------------------------:|
 |            init\n           | = \n\n                             | Initialize your board and anything else your program needs to function                                                      |
 |            name\n           | = PROGRAM_NAME\n\n                 |                                                                                                                             |
 |      move R1 C1 R2 C2\n     | = \n\n                             | Update your board so that move has been played                                                                              |
