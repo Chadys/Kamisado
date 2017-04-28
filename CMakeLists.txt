@@ -18,7 +18,7 @@ add_executable(Kamisado_IA_Ramdom ${SOURCE_FILES_RAMDOM})
 set(SOURCE_FILES_REFEREE main_referee.cpp header.h Board.cpp Board.h Case.cpp Case.h Pion.cpp Pion.h Movement.cpp Movement.h Referee.cpp Referee.h)
 add_executable(Kamisado_Referee ${SOURCE_FILES_REFEREE})
 
-set(SOURCE_FILES_DISPLAY main_Display.cpp header.h Board.cpp Board.h Case.cpp Case.h Pion.cpp Pion.h Display.cpp Display.h Movement.cpp Movement.h)
+set(SOURCE_FILES_DISPLAY main_display.cpp header.h Board.cpp Board.h Case.cpp Case.h Pion.cpp Pion.h Display.cpp Display.h Movement.cpp Movement.h)
 add_executable(Kamisado_Display ${SOURCE_FILES_DISPLAY})
 
 #External libraries

@@ -22,8 +22,8 @@ int main() {
     if (command == "init"){
         sf::Thread thread(&command_input);
         thread.launch();
-        myDisplay.init();
         std::cout << "= \n\n";
+        myDisplay.init();
     }
     return 0;
 }
@@ -38,10 +38,6 @@ void execute_input(){
         std::cout << "= \n\n";
         myDisplay.quit();
         exit(EXIT_SUCCESS);
-    }
-    if (command == "init"){
-        myDisplay.init();
-        std::cout << "= \n\n";
     }
     if (command == "names"){
         std::getline(sstream, myDisplay.name1, ';');

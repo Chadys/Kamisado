@@ -11,6 +11,8 @@ PROG_ARB = 2
 PROG_DIS = 3
 
 GREEN = "\033[0;32m"
+BLUE  = "\033[0;34m"
+RED   = "\033[1;31m"
 RESET = "\033[0;0m"
 
 
@@ -18,11 +20,11 @@ PROCESSES = []
 
 def end(ia_):
     """"Send close command to all process and print winner"""
-    if ia_ != -1:
+    print(RED+"{} won !".format(PROCESSES[ia_]['name'])+RESET)
+    if ia_ != -1 and len(PROCESSES) == 4:
         if communicate(PROCESSES[PROG_DIS], 'endgame ' + str(ia_) + '\n', 2.0, except_none=True) != "OK":
             print('DISPLAYER failed for [endgame] command.')
         time.sleep(5)
-
     print("Exiting... ({})".format(ia_))
     for i, process in enumerate(PROCESSES):
         if communicate(process, 'quit\n', 0.5, except_none=True) != "OK":
@@ -75,7 +77,7 @@ def init_processes(length):
     if check < 2:
         end(check)
     PROCESSES[PROG_IA1]['name'] = name1
-    PROCESSES[PROG_IA2]['name'] = name2 + "test"
+    PROCESSES[PROG_IA2]['name'] = name2
 
     if length == 5 :
         if not communicate(PROCESSES[PROG_DIS], 'init\n', 2, except_none=True) == "OK":
@@ -85,17 +87,10 @@ def init_processes(length):
 
 def communicate(program_, command_, timeout_, except_none=False):
     """Send command to a program and return his answer"""
-    #print(color + 'TO [{}] : [{}]'.format(program_['id'], command_.strip())+ RESET)
     stream = program_['process'].stdin
     stream.write(command_.encode())
     stream.flush()
-    #print(color+'### stream id : {}'.format(stream)+RESET)
     res = program_['nbsr'].readline(timeout_)
-    # if res:
-    #     print(color+'FROM [{}] : [{}]'.format(program_['id'], ' '.join(res.split()))+RESET)
-    # else:
-    #     print(color + 'no res' + RESET)
-    #print('receive [{}]'.format(res.strip()))
     if res:
         res = res.split()
         if res:
@@ -111,56 +106,54 @@ def communicate(program_, command_, timeout_, except_none=False):
 def get_arb(command_, timeout_):
     """Get the arbitrator's answer for an IA move"""
     res = communicate(PROCESSES[PROG_ARB], command_, timeout_)
-    #print('REPONSE ARBITRE -get arb: [{}]'.format(res))
     if res:
         res = int(''.join(res))
     else:
         return None
     if res >= 0 and res <= 2:
-        #print('in')
         return res
     return None
 
 def main_loop(use_display, c_ia):
     """Boucle principale du programme"""
     if use_display:
-        print('i use display')
+        print('I use display')
     else:
-        print('nope')
+        print('No graphic display')
     c_adv = int(not c_ia)
     while True:
         time.sleep(0.5)
         print(GREEN+'\nPlayer : {}'.format(c_ia)+RESET)
-        print('\033[1;34msending [genmove] to IA{}'.format(c_ia)+RESET)
+        print(BLUE+'Sending [genmove] to {}'.format(PROCESSES[c_ia]['name'])+RESET)
         res_ia = communicate(PROCESSES[c_ia], 'genmove\n', 10.0)
         if not res_ia:
-            print("IA{} failed for [genmove] command\n".format(c_ia))
+            print("{} failed for [genmove] command\n".format(PROCESSES[c_ia]['name']))
             end(c_adv)
-        print('IA{} anwser [{}]'.format(c_ia, res_ia))
-        print('sending [move {}] to arbitrator'.format(res_ia))
+        print('{} anwser [{}]'.format(PROCESSES[c_ia]['name'], res_ia))
+        print('Sending [move {}] to arbitrator'.format(res_ia))
         res_arb = get_arb('move {}\n'.format(res_ia), 8.0)
         print('ARBITRATOR answer [{}]'.format(res_arb))
         if not res_arb or res_arb < 0 or res_arb > 2:
             end(-1)
         if res_arb == 0:
-            print("IA{} failed for [genmove] command (illegal move)\n".format(c_ia))
+            print("{} failed for [genmove] command (illegal move)\n".format(PROCESSES[c_ia]['name']))
             end(c_adv)
         elif res_arb == 2:
             if use_display:
-                print('sending [move {}] to DISPLAYER'.format(res_ia))
+                print('Sending [move {}] to DISPLAYER'.format(res_ia))
                 if communicate(PROCESSES[PROG_DIS], 'move ' + res_ia + '\n', 0.5, except_none=True) != "OK":
                     print('DISPLAYER failed for [move] command\n')
             end(c_ia)
 
-        print('\033[1;34mSending [move {}] to IA{}'.format(res_ia, c_adv)+RESET)
+        print(BLUE+'Sending [move {}] to {}'.format(res_ia, PROCESSES[c_adv]['name'])+RESET)
         if communicate(PROCESSES[c_adv], 'move {}\n'.format(res_ia), 2, except_none=True) != "OK":
-            print("IA{} failed for [move] command\n".format(c_adv))
+            print("{} failed for [move] command\n".format(PROCESSES[c_adv]['name']))
             end(c_ia)
         else:
-            print("IA{} OK".format(c_adv))
+            print("{} OK".format(PROCESSES[c_adv]['name']))
 
         if use_display:
-            print('sending [move {}] to DISPLAYER'.format(res_ia))
+            print('Sending [move {}] to DISPLAYER'.format(res_ia))
             if communicate(PROCESSES[PROG_DIS], 'move ' + res_ia + '\n', 0.5, except_none=True) != "OK":
                 print('DISPLAYER failed for [move] command\n')
 
@@ -176,5 +169,5 @@ if __name__ == "__main__":
         print('Arguments : AI1, AI2, Referee, Display (facultative)')
         exit()
     init_processes(length)
-    print('\033[1;31mfinished'+RESET)
+    print(RED+'Init finished'+RESET)
     main_loop(bool(length - 4), 0)
