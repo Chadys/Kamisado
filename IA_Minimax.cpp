@@ -42,7 +42,7 @@ double IA_Minimax::max(TERMINAL_STYLES adv_team, int profondeur)
     {
         Movement move = *it;
         this->move(move);
-        double score = this->max(current_team, profondeur - 1);
+        double score = this->min(current_team, profondeur - 1);
         if(score > max)
         {
             max = score;

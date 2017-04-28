@@ -2,16 +2,16 @@
 // Created by julie on 11/04/17.
 //
 
-#include "Arbiter.h"
+#include "Referee.h"
 
 
-Arbiter::Arbiter() : game_ended(0), next_team(BLACK), next_move_color(GRAY) {}
+Referee::Referee() : game_ended(0), next_team(BLACK), next_move_color(GRAY) {}
 
-void Arbiter::init(const char *file){
+void Referee::init(const char *file){
     this->b.init(file);
 }
 
-unsigned short Arbiter::move(Movement &m) {
+unsigned short Referee::move(Movement &m) {
     if(this->game_ended || !this->check_legal(m))
         return 0;
     if(this->check_end(m.fin)) {
@@ -25,7 +25,7 @@ unsigned short Arbiter::move(Movement &m) {
     return 1;
 }
 
-bool Arbiter::check_legal(Movement m) const{
+bool Referee::check_legal(Movement m) const{
     int front = next_team == BLACK ? 1 : -1;
     int side = m.fin.y - m.dep.y;
     if(side)
@@ -78,12 +78,12 @@ bool Arbiter::check_legal(Movement m) const{
     return true;
 }
 
-bool Arbiter::check_end(coord &last_move){
+bool Referee::check_end(coord &last_move){
     if (last_move.x == static_cast<int>(this->b.finish[this->next_team]))
             return true; //Player that just played won
     return false; //Game not finished
 }
 
-void Arbiter::resign(){
+void Referee::resign(){
     this->game_ended = this->next_team == BLACK ? 1 : 2;
 }

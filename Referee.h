@@ -2,17 +2,17 @@
 // Created by julie on 11/04/17.
 //
 
-#ifndef KAMISADO_ARBITER_H
-#define KAMISADO_ARBITER_H
+#ifndef KAMISADO_REFEREE_H
+#define KAMISADO_REFEREE_H
 
 
 #include "Board.h"
 
-class Arbiter {
+class Referee {
 public:
     unsigned short game_ended;
 
-    Arbiter();
+    Referee();
     void init(const char *file);
     unsigned short move(Movement &m);
     void resign();
@@ -27,4 +27,4 @@ private:
 };
 
 
-#endif //KAMISADO_ARBITER_H
+#endif //KAMISADO_REFEREE_H

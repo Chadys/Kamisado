@@ -9,20 +9,20 @@
 #include <sstream>
 #include <iostream>
 #include <csignal>
-#include "Arbiter.h"
+#include "Referee.h"
 
-void command_input(Arbiter a);
+void command_input(Referee a);
 static void manage_signals();
 static void handler(int signum);
 
 int main() {
-    Arbiter a;
+    Referee a;
     manage_signals();
     command_input(a);
     return 0;
 }
 
-void command_input(Arbiter a){
+void command_input(Referee a){
     std::string line, command;
     bool init_done = false;
 

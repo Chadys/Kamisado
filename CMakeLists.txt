@@ -15,8 +15,8 @@ add_executable(Kamisado_IA_Minimax ${SOURCE_FILES_MINIMAX})
 set(SOURCE_FILES_RAMDOM main_ia_ramdom.cpp header.h Board.cpp Board.h Case.cpp Case.h Pion.cpp Pion.h IA_Ramdom.cpp IA_Ramdom.h Movement.cpp Movement.h)
 add_executable(Kamisado_IA_Ramdom ${SOURCE_FILES_RAMDOM})
 
-set(SOURCE_FILES_ARBITER main_arbiter.cpp header.h Board.cpp Board.h Case.cpp Case.h Pion.cpp Pion.h Movement.cpp Movement.h Arbiter.cpp Arbiter.h)
-add_executable(Kamisado_Arbiter ${SOURCE_FILES_ARBITER})
+set(SOURCE_FILES_REFEREE main_referee.cpp header.h Board.cpp Board.h Case.cpp Case.h Pion.cpp Pion.h Movement.cpp Movement.h Referee.cpp Referee.h)
+add_executable(Kamisado_Referee ${SOURCE_FILES_REFEREE})
 
 set(SOURCE_FILES_DISPLAY main_Display.cpp header.h Board.cpp Board.h Case.cpp Case.h Pion.cpp Pion.h Display.cpp Display.h Movement.cpp Movement.h)
 add_executable(Kamisado_Display ${SOURCE_FILES_DISPLAY})

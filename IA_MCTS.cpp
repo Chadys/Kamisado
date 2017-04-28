@@ -7,7 +7,7 @@
 
 double IA_MCTS::UCT_const = 0.4;
 
-IA_MCTS::IA_MCTS() : first_move(true), team(GRAY), next_move_color(GRAY), max_depth(100), max_playouts(5) {}
+IA_MCTS::IA_MCTS() : first_move(true), team(GRAY), next_move_color(GRAY), max_depth(100), n_playouts(5) {}
 
 void IA_MCTS::init(const char *file){
     this->b.init(file);
@@ -18,7 +18,7 @@ void IA_MCTS::move(Movement m) {
     if (this->first_move) {
         this->team = WHITE;
         this->first_move = false;
-        this->max_playouts = 50;
+        this->n_playouts = 50;
     }
     this->next_move_color =
             static_cast<TERMINAL_STYLES>(this->b.cases[m.fin.x][m.fin.y].color - 16);
@@ -35,7 +35,7 @@ Movement IA_MCTS::genmove() {
     if (this->first_move) {
         this->team = BLACK;
         this->first_move = false;
-        this->max_playouts = 50;
+        this->n_playouts = 50;
     }
     this->MC_tree = new Node;
     this->MC_tree->moves_to = this->get_moves(this->next_move_color, this->team);
@@ -157,7 +157,7 @@ void IA_MCTS::playouts(Node *n){
         n->n_playouts++;
         return;
     }
-    for (unsigned int i = 0; i < this->max_playouts; ++i, current_team = c.pion->team, current_depth = n->depth) {
+    for (unsigned int i = 0; i < this->n_playouts; ++i, current_team = c.pion->team, current_depth = n->depth) {
         std::vector<Movement> next_moves(n->moves_to);
         std::vector<Movement> playout_moves;
         Movement m;

@@ -29,7 +29,7 @@ private:
     TERMINAL_STYLES next_move_color;
     Node *MC_tree;
     unsigned int max_depth;
-    unsigned int max_playouts;
+    unsigned int n_playouts;
 
     static Movement best_move(const std::vector<Node*> &successors);
     std::vector<Movement> get_moves(TERMINAL_STYLES color, TERMINAL_STYLES team, bool eval = false) const;

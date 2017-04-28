@@ -17,7 +17,7 @@ RESET = "\033[0;0m"
 PROCESSES = []
 
 def end(ia_):
-    """"Senc close command to all process and print winner"""
+    """"Send close command to all process and print winner"""
     if ia_ != -1:
         if communicate(PROCESSES[PROG_DIS], 'endgame ' + str(ia_) + '\n', 2.0, except_none=True) != "OK":
             print('DISPLAYER failed for [endgame] command.')
@@ -173,7 +173,7 @@ if __name__ == "__main__":
     print(sys.argv)
     length = len(sys.argv)
     if length < 4 or length > 5:
-        print('Arguments : IA1, IA2, Arbitrator, Display (facultative)')
+        print('Arguments : AI1, AI2, Referee, Display (facultative)')
         exit()
     init_processes(length)
     print('\033[1;31mfinished'+RESET)
