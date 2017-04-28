@@ -43,4 +43,5 @@ You just need to have a program looping over stdin and writing to stdout in reac
 |          genmove\n          | = R1 C1 R2 C2\n or = resign\n\n    | Calls your AI to provide to move you want to do depending on the current board state (and update your board with that move) |
 |            quit\n           | = \n\n                             | Do any clean up your program need, send the response and quit.                                                              |
 | other or in case of problem | = ?\n\n                            |                                                                                                                             |
+
 *Note :* R1 C1 R2 C2 corresponds respectively to the starting and the ending row and column of of piece.
