@@ -20,6 +20,7 @@ public:
     sf::Sound sound3;
     sf::Sound sound4;
     std::string val = "";
+    bool iFinish = 0;
     bool humanMove = 0;
     bool firstMove = 1;
     bool someOneSelected = 0;

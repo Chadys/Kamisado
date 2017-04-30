@@ -51,7 +51,7 @@ void execute_input(){
         // }
         std::cout << "= \n\n";
     }
-    if (command == "move"){
+    else if (command == "move"){
 
         Movement m;
         sstream >> m.dep.x;
@@ -69,10 +69,16 @@ void execute_input(){
         myDisplay.firstMove = 0;
         std::cout << "= \n\n";
     }
-    if (command == "genmove"){
+    else if (command == "genmove"){
         myDisplay.humanMove = 1;
+        while(!myDisplay.iFinish){
+            //std::cout << "ugh" << std::endl;
+            continue;
+        }
+        myDisplay.iFinish = 0;
+        std::cout << "= " << myDisplay.m << "\n\n"; 
     }
-    if (command == "endgame"){
+    else if (command == "endgame"){
         sstream >> myDisplay.val;
         myDisplay.sound3.play();
         std::cout << "= \n\n";

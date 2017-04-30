@@ -44,10 +44,10 @@ void Display::init(){
                                 m.dep.x = yS;
                                 m.dep.y = xS;
                                 m.fin.x = yy/70;
-                                m.fin.y = xx/70;
-                                std::cout << "= " << m << "\n\n";  
+                                m.fin.y = xx/70; 
                                 someOneSelected = 0;
-                                humanMove = 0;                        
+                                humanMove = 0;
+                                iFinish = 1;                        
                             }
                     }
                 }
