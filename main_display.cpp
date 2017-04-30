@@ -77,7 +77,6 @@ void execute_input(){
             myDisplay.sound2.play();
         }
         myDisplay.tour = !myDisplay.tour;
-        myDisplay.firstMove = 0;
         std::cout << "= \n\n";
     }
     else if (command == "genmove"){

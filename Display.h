@@ -24,9 +24,7 @@ public:
     std::string val = "";
     bool iFinish = 0;
     bool humanMove = 0;
-    bool firstMove = 1;
     bool someOneSelected = 0;
-    bool OMGHEISHERE = 0;
     int xS;
     int yS;
     int tailleWin = 70;
