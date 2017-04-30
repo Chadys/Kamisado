@@ -40,7 +40,7 @@ private:
      float rotate = 0;
      float rotateS = 0;
      float rot = 0;
-     float rotS = 0.0005;
+     float rotS = 0.5;
 };
 
 #endif //KAMISADO_DISPLAY_H

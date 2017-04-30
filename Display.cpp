@@ -28,34 +28,34 @@ void Display::init(){
         sf::Event event;
         while (this->window.pollEvent(event))
         {
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
-                sf::Vector2i localPosition = sf::Mouse::getPosition(window);
-                if(humanMove == 1){
-                    if(firstMove == 1){
-                        if(someOneSelected == 0){
-                            localPosition.x - 140;
-                            localPosition.y - 140;
-                            xS = localPosition.x/70;
-                            yS = localPosition.y/70;
-                            someOneSelected = 1;
-                        }
-                        else if(someOneSelected == 1){
-                            m.dep.x = xS;
-                            m.dep.y = yS;
-                            localPosition.x - 140;
-                            localPosition.y - 140;
-                            m.fin.x = localPosition.x/70;
-                            m.fin.y = localPosition.y/70;
-                            std::cout << "= " << m << "\n\n";  
-                            someOneSelected = 0;                          
-                        }
+            if (event.type == sf::Event::MouseButtonPressed){
+                if (event.mouseButton.button == sf::Mouse::Left){
+                    if(humanMove == 1){
+                            if(someOneSelected == 0 && event.mouseButton.x < 609 && event.mouseButton.y < 609 && event.mouseButton.x > 71 && event.mouseButton.y > 71){
+                                int xx = event.mouseButton.x -70;
+                                int yy = event.mouseButton.y -70;
+                                xS = xx/70;
+                                yS = yy/70;
+                                someOneSelected = 1;
+                            }
+                            else if(someOneSelected == 1){
+                                int xx = event.mouseButton.x -70;
+                                int yy = event.mouseButton.y -70;
+                                m.dep.x = yS;
+                                m.dep.y = xS;
+                                m.fin.x = yy/70;
+                                m.fin.y = xx/70;
+                                std::cout << "= " << m << "\n\n";  
+                                someOneSelected = 0;
+                                humanMove = 0;                        
+                            }
                     }
                 }
-            }
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Right)){
-                someOneSelected == 0;
-                xS = 9;
-                yS = 9;
+                if (event.mouseButton.button ==sf::Mouse::Right){
+                    someOneSelected = 0;
+                    xS = 9;
+                    yS = 9;
+                }
             }
             // évènement "fermeture demandée" : on ferme la fenêtre
             if (event.type == sf::Event::Closed)
@@ -157,7 +157,8 @@ void Display::GraphBoard(){
                     shape.setFillColor(sf::Color(220, 220, 220, 255));
                     shape.rotate(360 - (rotate += rot));
                 }
-                if(xS == countl && yS == countc){
+                //std::cout << "yS : " << yS << "countl : " << countl << "xS : " << xS << "countc : " << countc << std::endl;
+                if(yS == countc && xS == countl && someOneSelected == 1){
                     shape.rotate(rotateS += rotS);
                 }
                 shape.setPosition(45+50 + (70*countl), 95 + (70*countc));

@@ -46,9 +46,9 @@ void execute_input(){
     if (command == "names"){
         std::getline(sstream, myDisplay.name1, ';');
         std::getline(sstream, myDisplay.name2);
-        if(myDisplay.name1 == "Im Different" || myDisplay.name2 == "Im Different"){
-            myDisplay.sound4.play();
-        }
+        // if(myDisplay.name1 == "Im Different" || myDisplay.name2 == "Im Different"){
+        //     myDisplay.sound4.play();
+        // }
         std::cout << "= \n\n";
     }
     if (command == "move"){
