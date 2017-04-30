@@ -30,6 +30,6 @@ class NonBlockingStreamReader:
     def readline(self, timeout=None):
         """Read last line from the queue."""
         try:
-            return self._queue.get(block=timeout is not None, timeout=timeout)
+            return self._queue.get(block=True, timeout=timeout)
         except Empty:
             return None
