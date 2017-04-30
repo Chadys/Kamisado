@@ -38,7 +38,7 @@ void command_input(IA_Ramdom ia){
             }
         }
         if (command == "name"){
-            std::cout << "= I'm not like others\n\n";
+            std::cout << "= Im Different\n\n";
             continue;
         }
         if(init_done){

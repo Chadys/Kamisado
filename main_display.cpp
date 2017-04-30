@@ -36,12 +36,19 @@ void execute_input(){
     sstream >> command;
     if (command == "quit") {
         std::cout << "= \n\n";
+        myDisplay.sound1.stop();
+        myDisplay.sound2.stop();
+        myDisplay.sound3.stop();
+        myDisplay.sound4.stop();
         myDisplay.quit();
         exit(EXIT_SUCCESS);
     }
     if (command == "names"){
         std::getline(sstream, myDisplay.name1, ';');
         std::getline(sstream, myDisplay.name2);
+        if(myDisplay.name1 == "Im Different" || myDisplay.name2 == "Im Different"){
+            myDisplay.sound4.play();
+        }
         std::cout << "= \n\n";
     }
     if (command == "move"){
@@ -59,7 +66,11 @@ void execute_input(){
             myDisplay.sound2.play();
         }
         myDisplay.tour = !myDisplay.tour;
+        myDisplay.firstMove = 0;
         std::cout << "= \n\n";
+    }
+    if (command == "genmove"){
+        myDisplay.humanMove = 1;
     }
     if (command == "endgame"){
         sstream >> myDisplay.val;

@@ -14,6 +14,7 @@ public:
     TERMINAL_STYLES team;
     TERMINAL_STYLES color;
     coord pos;
+    bool selected = 0;
     static const Pion null;
     static const std::vector<TERMINAL_STYLES> possible_colors;
 

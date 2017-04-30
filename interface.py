@@ -24,7 +24,7 @@ def end(ia_):
     if ia_ != -1 and len(PROCESSES) == 4:
         if communicate(PROCESSES[PROG_DIS], 'endgame ' + str(ia_) + '\n', 2.0, except_none=True) != "OK":
             print('DISPLAYER failed for [endgame] command.')
-        time.sleep(5)
+        time.sleep(2)
     print("Exiting... ({})".format(ia_))
     for i, process in enumerate(PROCESSES):
         if communicate(process, 'quit\n', 0.5, except_none=True) != "OK":
