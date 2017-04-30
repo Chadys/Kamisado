@@ -22,7 +22,7 @@ RED   = "\033[1;31m"
 RESET = "\033[0;0m"
 
 HUMAIN = 1
-IA = 0
+PC = 0
 
 PROCESSES = []
 
@@ -35,9 +35,10 @@ def end(ia_):
         time.sleep(5)
     print("Exiting... ({})".format(ia_))
     for i, process in enumerate(PROCESSES):
-        if communicate(process, 'quit\n', 0.5, except_none=True) != "OK":
-            print('PROG_{} failed for [quit] command.\n'.format(i))
-        process['process'].kill()
+        if process['type'] == PC:
+            if communicate(process, 'quit\n', 0.5, except_none=True) != "OK":
+                print('PROG_{} failed for [quit] command.\n'.format(i))
+            process['process'].kill()
     exit()
 
 
@@ -63,7 +64,7 @@ def init_processes(length):
                             stderr=STDOUT)
             nbsr = NBSR(process.stdout, doprint=False, idd=i - 1)
             #NBSR(process.stdin, doprint=True, idd=i+9)
-            PROCESSES.append({'type':IA, 'process':process, 'nbsr':nbsr, 'id':i - 1})
+            PROCESSES.append({'type':PC, 'process':process, 'nbsr':nbsr, 'id':i - 1})
 
     if not communicate(PROCESSES[PROG_ARB], 'init\n', 2, except_none=True) == "OK":
         print('ARBITRATOR failed for [init] command.')
@@ -145,7 +146,7 @@ def get_arb(command_, timeout_):
 
 def ask_ia_or_humain(_ia):
     """Ask for genmove to process"""
-    if PROCESSES[_ia]['type'] == IA:
+    if PROCESSES[_ia]['type'] == PC:
         res = communicate(PROCESSES[_ia], 'genmove\n', TIMEOUT_IA)
     else:
         print("ASKING TO HUMAIN")
@@ -154,7 +155,7 @@ def ask_ia_or_humain(_ia):
 
 def notify_ia(_ia, _command):
     """Send move to process"""
-    if PROCESSES[_ia]['type'] == IA:
+    if PROCESSES[_ia]['type'] == PC:
         return communicate(PROCESSES[_ia], _command, TIMEOUT_ARB, except_none=True) is "OK"
     else:
         return True
