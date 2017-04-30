@@ -157,7 +157,6 @@ void Display::GraphBoard(){
                     shape.setFillColor(sf::Color(220, 220, 220, 255));
                     shape.rotate(360 - (rotate += rot));
                 }
-                //std::cout << "yS : " << yS << "countl : " << countl << "xS : " << xS << "countc : " << countc << std::endl;
                 if(yS == countc && xS == countl && someOneSelected == 1){
                     shape.rotate(rotateS += rotS);
                 }
