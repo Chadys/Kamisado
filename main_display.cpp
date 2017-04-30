@@ -4,6 +4,8 @@
 #include "Board.h"
 #include "Movement.h"
 #include "Display.h"
+#include <chrono>
+#include <thread>
 #include <SFML/Graphics.hpp>
 
 void command_input();
@@ -46,9 +48,10 @@ void execute_input(){
     if (command == "names"){
         std::getline(sstream, myDisplay.name1, ';');
         std::getline(sstream, myDisplay.name2);
-        // if(myDisplay.name1 == "Im Different" || myDisplay.name2 == "Im Different"){
-        //     myDisplay.sound4.play();
-        // }
+        if(myDisplay.name1 == "Im Different" || myDisplay.name2 == "Im Different"){
+            myDisplay.sound4.play();
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+        }
         std::cout << "= \n\n";
     }
     else if (command == "move"){
