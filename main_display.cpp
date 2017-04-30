@@ -48,9 +48,11 @@ void execute_input(){
     if (command == "names"){
         std::getline(sstream, myDisplay.name1, ';');
         std::getline(sstream, myDisplay.name2);
-        if(myDisplay.name1 == "Im Different" || myDisplay.name2 == "Im Different"){
-            myDisplay.sound4.play();
-            std::this_thread::sleep_for(std::chrono::seconds(2));
+        if(myDisplay.name1 == " Im Different"){
+            myDisplay.player1isdifferent = 1;
+        }
+        if(myDisplay.name2 == "Im Different\n\n"){
+            myDisplay.player2isdifferent = 1;
         }
         std::cout << "= \n\n";
     }
@@ -62,8 +64,14 @@ void execute_input(){
         sstream >> m.fin.x;
         sstream >> m.fin.y;
         myDisplay.b.move(m);
-        if(myDisplay.tour){
+        if(myDisplay.tour && myDisplay.player1isdifferent){
+            myDisplay.sound4.play();
+        }
+        else if(myDisplay.tour){
             myDisplay.sound1.play();
+        }        
+        else if(!myDisplay.tour && myDisplay.player2isdifferent){
+            myDisplay.sound4.play();
         }
         else{
             myDisplay.sound2.play();
@@ -75,8 +83,6 @@ void execute_input(){
     else if (command == "genmove"){
         myDisplay.humanMove = 1;
         while(!myDisplay.iFinish){
-            //std::cout << "ugh" << std::endl;
-            continue;
         }
         myDisplay.iFinish = 0;
         std::cout << "= " << myDisplay.m << "\n\n"; 

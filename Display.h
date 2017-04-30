@@ -19,6 +19,8 @@ public:
     sf::Sound sound2;
     sf::Sound sound3;
     sf::Sound sound4;
+    bool player1isdifferent = 0;
+    bool player2isdifferent = 0;
     std::string val = "";
     bool iFinish = 0;
     bool humanMove = 0;
