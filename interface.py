@@ -1,4 +1,4 @@
-"""Interfaçeur"""
+"""Interfacer"""
 # pylint: disable=line-too-long
 import sys
 from subprocess import Popen, PIPE, STDOUT
@@ -27,7 +27,7 @@ COMP = 0
 PROCESSES = []
 
 def end(ia_):
-    """"Send close command to all process and print winner"""
+    """"Send close command to all processes and print winner"""
     if ia_ != -1:
         print(RED+"{} won !".format(PROCESSES[ia_]['name'])+RESET)
         if len(PROCESSES) == 4:
@@ -43,13 +43,15 @@ def end(ia_):
     exit()
 
 
-def complicated(bool1, bool2):
-    """Do a complicated thing"""
-    if not (bool1 and bool2):
-        if not(bool1 or bool2):
-            return -1
-        return int(bool1 is not True)
-    return 2
+def eval_bool(bool1, bool2):
+    """Return 2 if both bool are true, -1 if they are both false
+    the identifier of the true one otherwise"""
+    count = 2
+    if not bool1:
+        count-=1
+    if not bool2:
+        count-=2
+    return count
 
 def init_processes(length):
     """Send init command to all processes"""
@@ -61,10 +63,8 @@ def init_processes(length):
             process = Popen(sys.argv[i], bufsize=0,
                             stdin=PIPE,
                             stdout=PIPE,
-                            #stdout=io.FileIO('out{}.txt'.format(i - 1), 'w'),
                             stderr=STDOUT)
             nbsr = NBSR(process.stdout, doprint=False, idd=i - 1)
-            #NBSR(process.stdin, doprint=True, idd=i+9)
             PROCESSES.append({'type':COMP, 'process':process, 'nbsr':nbsr, 'id':i - 1})
 
     PROCESSES[PROG_AI1]['name'] = "AI1"
@@ -89,7 +89,7 @@ def init_processes(length):
     for i, val in enumerate([val1, val2]):
         if not val:
             print_fail(i, "init")
-    check = complicated(val1, val2)
+    check = eval_bool(val1, val2)
     if check < 2:
         end(check)
 
@@ -110,7 +110,7 @@ def init_processes(length):
     for i, val in enumerate([val1, val2]):
         if not val:
             print_fail(i, "name")
-    check = complicated(val1, val2)
+    check = eval_bool(val1, val2)
     if check < 2:
         end(check)
     PROCESSES[PROG_AI1]['name'] = name1
@@ -123,7 +123,7 @@ def init_processes(length):
             print_fail(PROG_DIS, "names")
 
 def communicate(program_, command_, timeout_, except_none=False):
-    """Send command to a program and return his answer"""
+    """Send command to a program and return its answer"""
     stream = program_['process'].stdin
     stream.write(command_.encode())
     stream.flush()
@@ -152,7 +152,7 @@ def get_ref(command_, timeout_):
     return None
 
 def ask_ia_or_human(_ia):
-    """Ask for genmove to process"""
+    """Send genmove to correct process depending on the type of it"""
     if PROCESSES[_ia]['type'] == COMP:
         res = communicate(PROCESSES[_ia], 'genmove\n', TIMEOUT_AI)
     else:
@@ -168,7 +168,7 @@ def notify_ia(_ia, _command):
         return True
 
 def main_loop(use_display, c_ia):
-    """Boucle principale du programme"""
+    """Main loop of the program"""
     if use_display:
         print('I use display')
     else:
@@ -217,6 +217,7 @@ def main_loop(use_display, c_ia):
         c_adv = int(not c_ia)
 
 def print_fail(index_prog, name_command):
+    """Display text if a process answered incorrectly to a command"""
     print('{} failed for [{}] command.\n'.format(PROCESSES[index_prog]['name'], name_command))
 
 
