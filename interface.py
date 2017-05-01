@@ -57,7 +57,7 @@ def init_processes(length):
     """Send init command to all processes"""
     for i in range(1, length):
         print('{} : {}'.format(i - 1, sys.argv[i]))
-        if sys.argv[i] == "human":
+        if sys.argv[i] == "human" and i < 3:
             PROCESSES.append({'type':HUMAN, 'id':i - 1})
         else:
             process = Popen(sys.argv[i], bufsize=0,
@@ -70,7 +70,7 @@ def init_processes(length):
     PROCESSES[PROG_AI1]['name'] = "AI1"
     PROCESSES[PROG_AI2]['name'] = "AI2"
     PROCESSES[PROG_REF]['name'] = "REFEREE"
-    if length == 4:
+    if length == 5:
         PROCESSES[PROG_DIS]['name'] = "DISPLAYER"
     if not communicate(PROCESSES[PROG_REF], 'init\n', 2, except_none=True) == "OK":
         print_fail(PROG_REF, "init")

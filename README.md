@@ -1,7 +1,7 @@
 Presentation
 ===
 This is a program that play the single round basic version of the game Kamisado, [you can find the rules here](http://www.boardspace.net/kamisado/english/RULES%20ENG.pdf).
-It provide severals AI and a graphical displayer.
+It provide severals AIs and a graphical displayer.
 
 How to run
 ===
@@ -18,6 +18,7 @@ make
 ```bash
 python3 interface.py first_player_ai_exe_name second_player_ai_exe_name referee_exe_name display_exe_name (facultative)
 ```
+No exe of an AI must be called `human` (see *How to add a human player*).
 
 **Available exe after compilation**
 - *Kamisado_IA_MCTS :* An AI that use an MCTS algorithm to play
@@ -30,6 +31,10 @@ python3 interface.py first_player_ai_exe_name second_player_ai_exe_name referee_
 ```bash
 python3 interface.py Kamisado_IA_Ramdom Kamisado_IA_MCTS Kamisado_Referee Kamisado_Display
 ```
+
+**How to add a human player**
+
+Simply replace one (or both) of the exe name with `human`. The program will then ask you to play a move at the appropriate time. It will be your responsibility to do a legal move.
 
 **How to add an AI**
 
