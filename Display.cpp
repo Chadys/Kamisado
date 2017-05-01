@@ -9,14 +9,17 @@ void Display::init(){
     sf::SoundBuffer buffer1;
     sf::SoundBuffer buffer2;
     sf::SoundBuffer buffer3;
+    sf::SoundBuffer buffer4;
 
     buffer1.loadFromFile("./Extras/0.ogg");
     buffer2.loadFromFile("./Extras/1.ogg");
     buffer3.loadFromFile("./Extras/LaughSong.ogg");
+    buffer4.loadFromFile("./Extras/diff.ogg");
 
     sound1.setBuffer(buffer1);
     sound2.setBuffer(buffer2);
     sound3.setBuffer(buffer3);
+    sound4.setBuffer(buffer4);
 
     // on fait tourner le programme jusqu'à ce que la fenêtre soit fermée
     while (this->window.isOpen())
@@ -25,6 +28,35 @@ void Display::init(){
         sf::Event event;
         while (this->window.pollEvent(event))
         {
+            if (event.type == sf::Event::MouseButtonPressed){
+                if (event.mouseButton.button == sf::Mouse::Left){
+                    if(humanMove == 1){
+                            if(someOneSelected == 0 && event.mouseButton.x < 609 && event.mouseButton.y < 609 && event.mouseButton.x > 71 && event.mouseButton.y > 71){
+                                int xx = event.mouseButton.x -70;
+                                int yy = event.mouseButton.y -70;
+                                xS = xx/70;
+                                yS = yy/70;
+                                someOneSelected = 1;
+                            }
+                            else if(someOneSelected == 1){
+                                int xx = event.mouseButton.x -70;
+                                int yy = event.mouseButton.y -70;
+                                m.dep.x = yS;
+                                m.dep.y = xS;
+                                m.fin.x = yy/70;
+                                m.fin.y = xx/70; 
+                                someOneSelected = 0;
+                                humanMove = 0;
+                                iFinish = 1;                        
+                            }
+                    }
+                }
+                if (event.mouseButton.button ==sf::Mouse::Right){
+                    someOneSelected = 0;
+                    xS = 9;
+                    yS = 9;
+                }
+            }
             // évènement "fermeture demandée" : on ferme la fenêtre
             if (event.type == sf::Event::Closed)
                 this->window.close();
@@ -37,6 +69,9 @@ void Display::init(){
 
 void Display::GraphBoard(){
     if(rotate > 360){
+        rotate = 0;
+    }
+    if(rotateS > 360){
         rotate = 0;
     }
     int countl, countc;
@@ -122,6 +157,9 @@ void Display::GraphBoard(){
                     shape.setFillColor(sf::Color(220, 220, 220, 255));
                     shape.rotate(360 - (rotate += rot));
                 }
+                if(yS == countc && xS == countl && someOneSelected == 1){
+                    shape.rotate(rotateS += rotS);
+                }
                 shape.setPosition(45+50 + (70*countl), 95 + (70*countc));
 
 
@@ -175,7 +213,7 @@ void Display::GraphBoard(){
         tv.setPosition(sf::Vector2f(340, 370));
         this->window.draw(tv);
         if(rot < 2)
-            rot += 0.00005;
+            rot += 0.0001;
     }
     else if(val == "1"){
         tv.setString(name2);
@@ -189,7 +227,7 @@ void Display::GraphBoard(){
         tv.setPosition(sf::Vector2f(340, 370));
         this->window.draw(tv);
         if(rot < 2)
-            rot += 0.00005;
+            rot += 0.0001;
     }
 
 }

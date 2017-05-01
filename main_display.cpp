@@ -4,6 +4,8 @@
 #include "Board.h"
 #include "Movement.h"
 #include "Display.h"
+#include <chrono>
+#include <thread>
 #include <SFML/Graphics.hpp>
 
 void command_input();
@@ -36,15 +38,25 @@ void execute_input(){
     sstream >> command;
     if (command == "quit") {
         std::cout << "= \n\n";
+        myDisplay.sound1.stop();
+        myDisplay.sound2.stop();
+        myDisplay.sound3.stop();
+        myDisplay.sound4.stop();
         myDisplay.quit();
         exit(EXIT_SUCCESS);
     }
     if (command == "names"){
         std::getline(sstream, myDisplay.name1, ';');
         std::getline(sstream, myDisplay.name2);
+        if(myDisplay.name1 == " Im Different"){
+            myDisplay.player1isdifferent = 1;
+        }
+        if(myDisplay.name2 == "Im Different\n\n"){
+            myDisplay.player2isdifferent = 1;
+        }
         std::cout << "= \n\n";
     }
-    if (command == "move"){
+    else if (command == "move"){
 
         Movement m;
         sstream >> m.dep.x;
@@ -52,8 +64,14 @@ void execute_input(){
         sstream >> m.fin.x;
         sstream >> m.fin.y;
         myDisplay.b.move(m);
-        if(myDisplay.tour){
+        if(myDisplay.tour && myDisplay.player1isdifferent){
+            myDisplay.sound4.play();
+        }
+        else if(myDisplay.tour){
             myDisplay.sound1.play();
+        }        
+        else if(!myDisplay.tour && myDisplay.player2isdifferent){
+            myDisplay.sound4.play();
         }
         else{
             myDisplay.sound2.play();
@@ -61,7 +79,14 @@ void execute_input(){
         myDisplay.tour = !myDisplay.tour;
         std::cout << "= \n\n";
     }
-    if (command == "endgame"){
+    else if (command == "genmove"){
+        myDisplay.humanMove = 1;
+        while(!myDisplay.iFinish){
+        }
+        myDisplay.iFinish = 0;
+        std::cout << "= " << myDisplay.m << "\n\n"; 
+    }
+    else if (command == "endgame"){
         sstream >> myDisplay.val;
         myDisplay.sound3.play();
         std::cout << "= \n\n";
