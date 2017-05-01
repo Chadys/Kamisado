@@ -1,5 +1,8 @@
 #include "Display.h"
 
+Display::Display() : player1isdifferent(false), player2isdifferent(false), val(""), iFinish(false), humanMove(false),
+                     someOneSelected(false), tailleWin(70), win_text_increment(1), tour(true), name1(""), name2(""),
+                     rotation_victory({0.0f, 0.0f}), rotation_selected({0.0, 0.5}){}
 
 void Display::init(){
     sf::ContextSettings settings;
@@ -16,10 +19,10 @@ void Display::init(){
     buffer3.loadFromFile("./Extras/LaughSong.ogg");
     buffer4.loadFromFile("./Extras/diff.ogg");
 
-    sound1.setBuffer(buffer1);
-    sound2.setBuffer(buffer2);
-    sound3.setBuffer(buffer3);
-    sound4.setBuffer(buffer4);
+    this->sounds[0].setBuffer(buffer1);
+    this->sounds[1].setBuffer(buffer2);
+    this->sounds[2].setBuffer(buffer3);
+    this->sounds[3].setBuffer(buffer4);
 
     // on fait tourner le programme jusqu'à ce que la fenêtre soit fermée
     while (this->window.isOpen())
@@ -32,20 +35,15 @@ void Display::init(){
                 if (event.mouseButton.button == sf::Mouse::Left){
                     if(humanMove == 1){
                             if(someOneSelected == 0 && event.mouseButton.x < 609 && event.mouseButton.y < 609 && event.mouseButton.x > 71 && event.mouseButton.y > 71){
-                                int xx = event.mouseButton.x -70;
-                                int yy = event.mouseButton.y -70;
-                                xS = xx/70;
-                                yS = yy/70;
-                                if(b.cases[yS][xS].pion != nullptr)
+                                this->coord_S = {(event.mouseButton.x-70)/70, (event.mouseButton.y-70)/70};
+                                if(b.cases[coord_S.y][coord_S.x].pion != nullptr)
                                     someOneSelected = 1;
                             }
                             else if(someOneSelected == 1){
-                                int xx = event.mouseButton.x -70;
-                                int yy = event.mouseButton.y -70;
-                                m.dep.x = yS;
-                                m.dep.y = xS;
-                                m.fin.x = yy/70;
-                                m.fin.y = xx/70; 
+                                m.dep.x = this->coord_S.y;
+                                m.dep.y = this->coord_S.x;
+                                m.fin.x = (event.mouseButton.y-70)/70;
+                                m.fin.y = (event.mouseButton.x-70)/70;
                                 someOneSelected = 0;
                                 humanMove = 0;
                                 iFinish = 1;                        
@@ -54,8 +52,7 @@ void Display::init(){
                 }
                 if (event.mouseButton.button ==sf::Mouse::Right){
                     someOneSelected = 0;
-                    xS = 9;
-                    yS = 9;
+                    this->coord_S = {9, 9};
                 }
             }
             // évènement "fermeture demandée" : on ferme la fenêtre
@@ -69,11 +66,11 @@ void Display::init(){
 }
 
 void Display::GraphBoard(){
-    if(rotate > 360){
-        rotate = 0;
+    if(rotation_victory.angle > 360){
+        rotation_victory.angle = 0;
     }
-    if(rotateS > 360){
-        rotate = 0;
+    if(rotation_selected.angle > 360){
+        rotation_selected.angle = 0;
     }
     int countl, countc;
     sf::Font font;
@@ -150,16 +147,16 @@ void Display::GraphBoard(){
                 if(c.pion->team == BLACK){
                     shape.setOutlineColor(sf::Color(0, 0, 0, 255));
                     shape.setFillColor(sf::Color(50, 50, 50, 255));
-                    shape.rotate(rotate += rot);
+                    shape.rotate(this->rotation_victory.angle += this->rotation_victory.speed);
 
                 }
                 else if (c.pion->team == WHITE){
                     shape.setOutlineColor(sf::Color(255, 255, 255, 255));
                     shape.setFillColor(sf::Color(220, 220, 220, 255));
-                    shape.rotate(360 - (rotate += rot));
+                    shape.rotate(360 - (this->rotation_victory.angle += this->rotation_victory.speed));
                 }
-                if(yS == countc && xS == countl && someOneSelected == 1){
-                    shape.rotate(rotateS += rotS);
+                if(this->coord_S.y == countc && this->coord_S.x == countl && someOneSelected == 1){
+                    shape.rotate(rotation_selected.angle += rotation_selected.speed);
                 }
                 shape.setPosition(45+50 + (70*countl), 95 + (70*countc));
 
@@ -198,8 +195,8 @@ void Display::GraphBoard(){
     tv.setFont(font2);
     tv.setString(name1);
     if(tailleWin < 70 || tailleWin > 80)
-        ugh *= -1;
-    tv.setCharacterSize(tailleWin += ugh);
+        win_text_increment = -win_text_increment;
+    tv.setCharacterSize(tailleWin += win_text_increment);
     tv.setColor(sf::Color::White);
     
     if(val == "0"){
@@ -213,8 +210,8 @@ void Display::GraphBoard(){
         tv.setOrigin(textRect.left + textRect.width/2.0f,textRect.top  + textRect.height/2.0f);
         tv.setPosition(sf::Vector2f(340, 370));
         this->window.draw(tv);
-        if(rot < 2)
-            rot += 0.0001;
+        if(rotation_victory.speed < 2)
+            rotation_victory.speed += 0.0001;
     }
     else if(val == "1"){
         tv.setString(name2);
@@ -227,8 +224,8 @@ void Display::GraphBoard(){
         tv.setOrigin(textRect.left + textRect.width/2.0f,textRect.top  + textRect.height/2.0f);
         tv.setPosition(sf::Vector2f(340, 370));
         this->window.draw(tv);
-        if(rot < 2)
-            rot += 0.0001;
+        if(rotation_victory.speed < 2)
+            rotation_victory.speed += 0.0001;
     }
 
 }

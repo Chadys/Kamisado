@@ -9,7 +9,6 @@
 #include <SFML/Graphics.hpp>
 
 void command_input();
-void nameManager(std::string name1, std::string name2);
 void execute_input();
 void manage_signals();
 static void handler(int signum);
@@ -38,10 +37,9 @@ void execute_input(){
     sstream >> command;
     if (command == "quit") {
         std::cout << "= \n\n";
-        myDisplay.sound1.stop();
-        myDisplay.sound2.stop();
-        myDisplay.sound3.stop();
-        myDisplay.sound4.stop();
+        for (int i = 0; i < 4; ++i) {
+            myDisplay.sounds[i].stop();
+        }
         myDisplay.quit();
         exit(EXIT_SUCCESS);
     }
@@ -63,17 +61,17 @@ void execute_input(){
         sstream >> m.fin.x;
         sstream >> m.fin.y;
         myDisplay.b.move(m);
-        if(myDisplay.tour && myDisplay.player1isdifferent){
-            myDisplay.sound4.play();
-        }
-        else if(myDisplay.tour){
-            myDisplay.sound1.play();
-        }        
-        else if(!myDisplay.tour && myDisplay.player2isdifferent){
-            myDisplay.sound4.play();
+        if(myDisplay.tour){
+            if(myDisplay.player1isdifferent)
+                myDisplay.sounds[3].play();
+            else
+                myDisplay.sounds[0].play();
         }
         else{
-            myDisplay.sound2.play();
+            if(myDisplay.player2isdifferent)
+                myDisplay.sounds[3].play();
+            else
+                myDisplay.sounds[1].play();
         }
         myDisplay.tour = !myDisplay.tour;
         std::cout << "= \n\n";
@@ -87,7 +85,7 @@ void execute_input(){
     }
     else if (command == "endgame"){
         sstream >> myDisplay.val;
-        myDisplay.sound3.play();
+        myDisplay.sounds[2].play();
         std::cout << "= \n\n";
     }
 }

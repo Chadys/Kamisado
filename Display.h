@@ -15,33 +15,34 @@
 class Display {
 public:
     Movement m;
-    sf::Sound sound1;
-    sf::Sound sound2;
-    sf::Sound sound3;
-    sf::Sound sound4;
-    bool player1isdifferent = 0;
-    bool player2isdifferent = 0;
-    std::string val = "";
-    bool iFinish = 0;
-    bool humanMove = 0;
-    bool someOneSelected = 0;
-    int xS;
-    int yS;
-    int tailleWin = 70;
-    int ugh = 1;
+    sf::Sound sounds[4];
+    bool player1isdifferent;
+    bool player2isdifferent;
+    std::string val;
+    bool iFinish;
+    bool humanMove;
+    bool someOneSelected;
+    coord coord_S;
+    unsigned int tailleWin;
+    short win_text_increment;
     Board b;
-    bool tour = true;
-    std::string name1 = "";
-    std::string name2 = "";
+    bool tour;
+    std::string name1;
+    std::string name2;
+
+    Display();
     void quit();
     void init();
     void GraphBoard();
 private:
-     sf::RenderWindow window;
-     float rotate = 0;
-     float rotateS = 0;
-     float rot = 0;
-     float rotS = 0.5;
+    struct Rotation{
+        float angle;
+        float speed;
+        Rotation(float a, float s) : angle(a), speed(s) {}
+    };
+    sf::RenderWindow window;
+    Rotation rotation_victory;
+    Rotation rotation_selected;
 };
 
 #endif //KAMISADO_DISPLAY_H

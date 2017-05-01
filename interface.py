@@ -184,7 +184,7 @@ def main_loop(use_display, c_ia):
             end(c_adv)
 
         print('{} anwser [{}]'.format(PROCESSES[c_ia]['name'], res_ia))
-        print('Sending [move {}] to referee'.format(res_ia))
+        print('Sending [move {}] to REFEREE'.format(res_ia))
         res_ref = get_ref('move {}\n'.format(res_ia), 8.0)
         print('REFEREE answer [{}]'.format(res_ref))
         if res_ref is None or res_ref < 0 or res_ref > 2:
