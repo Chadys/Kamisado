@@ -11,8 +11,8 @@ void Display::init(){
     sf::SoundBuffer buffer3;
     sf::SoundBuffer buffer4;
 
-    buffer1.loadFromFile("./Extras/0.ogg");
-    buffer2.loadFromFile("./Extras/1.ogg");
+    buffer1.loadFromFile("./Extras/0Ampl.ogg");
+    buffer2.loadFromFile("./Extras/1Ampl.ogg");
     buffer3.loadFromFile("./Extras/LaughSong.ogg");
     buffer4.loadFromFile("./Extras/diff.ogg");
 
@@ -36,7 +36,8 @@ void Display::init(){
                                 int yy = event.mouseButton.y -70;
                                 xS = xx/70;
                                 yS = yy/70;
-                                someOneSelected = 1;
+                                if(b.cases[yS][xS].pion != nullptr)
+                                    someOneSelected = 1;
                             }
                             else if(someOneSelected == 1){
                                 int xx = event.mouseButton.x -70;

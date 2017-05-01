@@ -51,13 +51,12 @@ void execute_input(){
         if(myDisplay.name1 == " Im Different"){
             myDisplay.player1isdifferent = 1;
         }
-        if(myDisplay.name2 == "Im Different\n\n"){
+        if(myDisplay.name2.find("Im Different")!= std::string::npos){
             myDisplay.player2isdifferent = 1;
         }
         std::cout << "= \n\n";
     }
     else if (command == "move"){
-
         Movement m;
         sstream >> m.dep.x;
         sstream >> m.dep.y;
