@@ -33,7 +33,7 @@ def end(ia_):
         if len(PROCESSES) == 4:
             if communicate(PROCESSES[PROG_DIS], 'endgame ' + str(ia_) + '\n', 2.0, except_none=True) != "OK":
                 print('DISPLAYER failed for [endgame] command.')
-            time.sleep(5)
+            time.sleep(24)
     print("Exiting... ({})".format(ia_))
     for i, process in enumerate(PROCESSES):
         if process['type'] == COMP:
