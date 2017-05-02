@@ -58,7 +58,11 @@ def init_processes(length):
     for i in range(1, length):
         print('{} : {}'.format(i - 1, sys.argv[i]))
         if sys.argv[i] == "human" and i < 3:
-            PROCESSES.append({'type':HUMAN, 'id':i - 1})
+            if length == 5:
+                PROCESSES.append({'type':HUMAN, 'id':i - 1})
+            else:
+                print(RED+"To play as a human, you need a displayer executable\n"+RESET)
+                end(-1)
         else:
             process = Popen(sys.argv[i], bufsize=0,
                             stdin=PIPE,
