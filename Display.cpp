@@ -1,7 +1,7 @@
 #include "Display.h"
 
 Display::Display() : player1isdifferent(false), player2isdifferent(false), val(""), iFinish(false), humanMove(false),
-                     someOneSelected(false), tailleWin(70), win_text_increment(1), tour(true), name1(""), name2(""),
+                     someOneSelected(false), firstMove(true), tailleWin(70), win_text_increment(1), tour(true), name1(""), name2(""),
                      rotation_victory({0.0f, 0.0f}), rotation_selected({0.0, 0.5}){}
 
 void Display::init(){
@@ -34,7 +34,7 @@ void Display::init(){
             if (event.type == sf::Event::MouseButtonPressed){
                 if (event.mouseButton.button == sf::Mouse::Left){
                     if(humanMove == 1){
-                            if(someOneSelected == 0 && event.mouseButton.x < 609 && event.mouseButton.y < 609 && event.mouseButton.x > 71 && event.mouseButton.y > 71){
+                            if(someOneSelected == 0 && event.mouseButton.x < 609 && event.mouseButton.y < 609 && event.mouseButton.x > 71 && event.mouseButton.y > 71 && this->firstMove){
                                 this->coord_S = {(event.mouseButton.x-70)/70, (event.mouseButton.y-70)/70};
                                 if(b.cases[coord_S.y][coord_S.x].pion != nullptr)
                                     someOneSelected = 1;
@@ -50,7 +50,7 @@ void Display::init(){
                             }
                     }
                 }
-                if (event.mouseButton.button ==sf::Mouse::Right){
+                if (event.mouseButton.button ==sf::Mouse::Right && firstMove){
                     someOneSelected = 0;
                     this->coord_S = {9, 9};
                 }
@@ -224,13 +224,26 @@ void Display::GraphBoard(){
         tv.setOrigin(textRect.left + textRect.width/2.0f,textRect.top  + textRect.height/2.0f);
         tv.setPosition(sf::Vector2f(340, 370));
         this->window.draw(tv);
-        if(rotation_victory.speed < 2)
-            rotation_victory.speed += 0.0001;
+        if(this->rotation_victory.speed < 2)
+            this->rotation_victory.speed += 0.0001;
     }
 
 }
 
 void Display::quit(){
     this->window.close();
+}
+
+void Display::updateSelected(int x, int y){
+    TERMINAL_STYLES color = static_cast<TERMINAL_STYLES>(this->b.cases[x][y].color - 16);
+    for(Pion *pion : this->b.pions){
+        //std::cout << color << " " << pion->color << std::endl;
+        if(color==pion->color && b.cases[x][y].pion->team != pion->team){
+            coord_S = {pion->pos.y, pion->pos.x};
+            //std::cout << "now the selected is : " << coord_S.x << " " << coord_S.y << std::endl;
+            someOneSelected = true;
+            break;
+        }
+    }
 }
 

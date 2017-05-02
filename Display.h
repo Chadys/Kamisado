@@ -22,6 +22,7 @@ public:
     bool iFinish;
     bool humanMove;
     bool someOneSelected;
+    bool firstMove;
     coord coord_S;
     unsigned int tailleWin;
     short win_text_increment;
@@ -34,6 +35,7 @@ public:
     void quit();
     void init();
     void GraphBoard();
+    void updateSelected(int x, int y);
 private:
     struct Rotation{
         float angle;
