@@ -1,8 +1,8 @@
 #include "Display.h"
 
-Display::Display() : player1isdifferent(false), player2isdifferent(false), val(""), iFinish(false), humanMove(false),
-                     someOneSelected(false), firstMove(true), tailleWin(70), win_text_increment(1), tour(true), name1(""), name2(""),
-                     rotation_victory({0.0f, 0.0f}), rotation_selected({0.0, 0.5}){}
+Display::Display() : player1isdifferent(false), player2isdifferent(false), iFinish(false), humanMove(false), val(""),
+                     name1(""), name2(""), someOneSelected(false), firstMove(true), tailleWin(70), win_text_increment(1),
+                     tour(true), rotation_victory({0.0f, 0.0f}), rotation_selected({0.0, 0.5}){}
 
 void Display::init(){
     sf::ContextSettings settings;
@@ -228,6 +228,25 @@ void Display::GraphBoard(){
             this->rotation_victory.speed += 0.0001;
     }
 
+}
+
+void Display::move(Movement m){
+    this->b.move(m);
+    if(this->tour){
+        if(this->player1isdifferent)
+            this->sounds[3].play();
+        else
+            this->sounds[0].play();
+    }
+    else{
+        if(this->player2isdifferent)
+            this->sounds[3].play();
+        else
+            this->sounds[1].play();
+    }
+    this->tour = !this->tour;
+    this->firstMove = false;
+    this->updateSelected(m.fin.x, m.fin.y);
 }
 
 void Display::quit(){

@@ -34,7 +34,9 @@ python3 interface.py Kamisado_IA_Ramdom Kamisado_IA_MCTS Kamisado_Referee Kamisa
 
 **How to add a human player**
 
-Simply replace one (or both) of the exe name with `human`. The program will then ask you to play a move at the appropriate time. It will be your responsibility to do a legal move.
+Simply replace one (or both) of the exe name with `human` (you need the graphic displayer for this). The program will then ask you to play a move at the appropriate time. It will be your responsibility to do a legal move.
+If you are the first player you need to click on the piece you want to move and then on the case you want to move it to (you can use right click to deselect that piece if you want to choose another one).
+After the first move, the piece that will move is automatically selected for you so just click on the case you want to move that piece to. If you can't move and need to pass, click on the case where your piece is at.
 
 **How to add an AI**
 

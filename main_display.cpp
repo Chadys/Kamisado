@@ -2,11 +2,9 @@
 #include <iostream>
 #include <csignal>
 #include "Board.h"
-#include "Movement.h"
 #include "Display.h"
 #include <chrono>
 #include <thread>
-#include <SFML/Graphics.hpp>
 
 void command_input();
 void execute_input();
@@ -60,22 +58,7 @@ void execute_input(){
         sstream >> m.dep.y;
         sstream >> m.fin.x;
         sstream >> m.fin.y;
-        myDisplay.b.move(m);
-        if(myDisplay.tour){
-            if(myDisplay.player1isdifferent)
-                myDisplay.sounds[3].play();
-            else
-                myDisplay.sounds[0].play();
-        }
-        else{
-            if(myDisplay.player2isdifferent)
-                myDisplay.sounds[3].play();
-            else
-                myDisplay.sounds[1].play();
-        }
-        myDisplay.tour = !myDisplay.tour;
-        myDisplay.firstMove = false;
-        myDisplay.updateSelected(m.fin.x, m.fin.y);
+        myDisplay.move(m);
         std::cout << "= \n\n";
     }
     else if (command == "genmove"){
