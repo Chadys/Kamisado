@@ -1,7 +1,7 @@
 Presentation
 ===
 This is a program that play the single round basic version of the game Kamisado, [you can find the rules here](http://www.boardspace.net/kamisado/english/RULES%20ENG.pdf).
-It provide severals AIs and a graphical displayer.
+It provide severals AIs and a graphical displayer. Please note that in this program, the black pieces are at the top of the board.
 
 How to run
 ===
@@ -10,7 +10,7 @@ How to run
 
 **Compilation**
 ```bash
-cmake CMakeList.txt
+cmake CMakeLists.txt
 make
 ```
 
