@@ -29,7 +29,7 @@ No exe of an AI must be called `human` (see *How to add a human player*).
 
 **Launch example**
 ```bash
-python3 interface.py Kamisado_IA_Ramdom Kamisado_IA_MCTS Kamisado_Referee Kamisado_Display
+python3 ./interface.py ./Kamisado_IA_Ramdom ./Kamisado_IA_MCTS ./Kamisado_Referee ./Kamisado_Display
 ```
 
 **How to add a human player**

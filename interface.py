@@ -67,7 +67,7 @@ def init_processes(length):
             process = Popen(sys.argv[i], bufsize=0,
                             stdin=PIPE,
                             stdout=PIPE,
-                            stderr=STDOUT)
+                            stderr=sys.stdout)
             nbsr = NBSR(process.stdout, doprint=False, idd=i - 1)
             PROCESSES.append({'type':COMP, 'process':process, 'nbsr':nbsr, 'id':i - 1})
 
