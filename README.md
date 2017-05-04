@@ -7,6 +7,9 @@ How to run
 ===
 **Dependences**
 - SFML
+```bash
+sudo apt install libsfml-dev
+```
 
 **Compilation**
 ```bash
@@ -34,21 +37,21 @@ python3 ./interface.py ./Kamisado_IA_Ramdom ./Kamisado_IA_MCTS ./Kamisado_Refere
 
 **How to add a human player**
 
-Simply replace one (or both) of the exe name with `human` (you need the graphic displayer for this). The program will then ask you to play a move at the appropriate time. It will be your responsibility to do a legal move.
-If you are the first player you need to click on the piece you want to move and then on the case you want to move it to (you can use right click to deselect that piece if you want to choose another one).
-After the first move, the piece that will move is automatically selected for you so just click on the case you want to move that piece to. If you can't move and need to pass, click on the case where your piece is at.
+Simply replace one (or both if you want a match human vs. human) of the exe name with `human` (you need the graphic displayer for this). The program will then ask you to play a move at the appropriate time. It will be your responsibility to do a legal move.
+If you are the first player you need to click on the piece you want to move and then on the case you want to move it to (you can use right click to unselect that piece if you want to choose another one).
+After the first move, the piece that will move is automatically selected for you (you can't unselect it either) so just click on the case you want to move that piece to. If you can't move and need to pass, click on the case where your piece is at.
 
 **How to add an AI**
 
 You just need to have a program looping over stdin and writing to stdout in reaction to these commands :
 
-|           Commands          |      Response                      |     Other action needed             |
-|:---------------------------:|:----------------------------------:|:-----------------------------------:|
-|init\n|= \n\n|Initialize your board and anything else your program needs to function|
-|name\n|= PROGRAM_NAME\n\n| |
-|move R1 C1 R2 C2\n|= \n\n|Update your board so that move has been played|
-|genmove\n|= R1 C1 R2 C2\n\n or = resign\n\n|Calls your AI to provide to move you want to do depending on the current board state (and update your board with that move)|
-|quit\n|= \n\n|Do any clean up your program need, send the response and quit.|
-|other or in case of problem|= ?\n\n| |
+|           Command           |Meaning in natural language|      Response        |     Other action needed        |
+|:---------------------------:|:-------------------------:|:--------------------:|:------------------------------:|
+|init\n|Prepare you to play !|= \n\n|Initialize your board and anything else your program needs to function|
+|name\n|What's your name ?|= PROGRAM_NAME\n\n| |
+|move R1 C1 R2 C2\n|I played that.|= \n\n|Update your board so that move has been played|
+|genmove\n|What do you play next ?|= R1 C1 R2 C2\n\n or = resign\n\n|Calls your AI to provide the move you want to do depending on the current board state (and update your board with that move).|.
+|quit\n|The game is over.|= \n\n|Do any clean up your program need, send the response and quit.|
+|other or in case of problem|\*$&@#|= ?\n\n| |
 
-*Note :* R1 C1 R2 C2 corresponds respectively to the starting and the ending row and column of a piece.
+*Note :* R1 C1 R2 C2 corresponds respectively to the number of the starting and ending row and column of a piece.
