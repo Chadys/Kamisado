@@ -3,11 +3,9 @@
 #include <csignal>
 #include "Board.h"
 #include "Display.h"
-#include <chrono>
-#include <thread>
 
 void command_input();
-void execute_input();
+bool execute_input();
 void manage_signals();
 static void handler(int signum);
 Display myDisplay;
@@ -18,17 +16,18 @@ int main() {
     std::getline(std::cin, line); 
     std::istringstream sstream(line);
     sstream >> command;
+    sf::Thread thread(&command_input);
     if (command == "init"){
-        sf::Thread thread(&command_input);
         thread.launch();
         std::cout << "= \n\n";
         myDisplay.init();
     }
+    thread.wait();
     return 0;
 }
 
 
-void execute_input(){
+bool execute_input(){
     std::string line, command, names;
     std::getline(std::cin, line); 
     std::istringstream sstream(line);
@@ -40,6 +39,8 @@ void execute_input(){
         }
         myDisplay.quit();
         exit(EXIT_SUCCESS);
+        return true;
+
     }
     if (command == "names"){
         std::getline(sstream, myDisplay.name1, ';');
@@ -51,6 +52,7 @@ void execute_input(){
             myDisplay.player2isdifferent = 1;
         }
         std::cout << "= \n\n";
+        return false;
     }
     else if (command == "move"){
         Movement m;
@@ -60,6 +62,7 @@ void execute_input(){
         sstream >> m.fin.y;
         myDisplay.move(m);
         std::cout << "= \n\n";
+        return false;
     }
     else if (command == "genmove"){
         myDisplay.humanMove = 1;
@@ -67,16 +70,21 @@ void execute_input(){
         }
         myDisplay.iFinish = 0;
         std::cout << "= " << myDisplay.m << "\n\n"; 
+        return false;
     }
     else if (command == "endgame"){
         sstream >> myDisplay.val;
         myDisplay.sounds[2].play();
         std::cout << "= \n\n";
+        return false;
     }
+    return false;
 }
+
 void command_input(){
-    while(1){
-        execute_input();
+    bool endThread = 0;
+    while(!endThread){
+        endThread = execute_input();
     }
 }
 
