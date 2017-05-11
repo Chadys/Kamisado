@@ -38,9 +38,7 @@ bool execute_input(){
             myDisplay.sounds[i].stop();
         }
         myDisplay.quit();
-        exit(EXIT_SUCCESS);
         return true;
-
     }
     if (command == "names"){
         std::getline(sstream, myDisplay.name1, ';');
@@ -86,6 +84,7 @@ void command_input(){
     while(!endThread){
         endThread = execute_input();
     }
+    exit(EXIT_SUCCESS);
 }
 
 void manage_signals(){
