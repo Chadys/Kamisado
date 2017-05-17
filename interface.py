@@ -151,7 +151,7 @@ def get_ref(command_, timeout_):
         res = int(''.join(res))
     else:
         return None
-    if res >= 0 and res <= 2:
+    if res >= 0 and res <= 3:
         return res
     return None
 
@@ -191,19 +191,22 @@ def main_loop(use_display, c_ia):
         print('Sending [move {}] to REFEREE'.format(res_ia))
         res_ref = get_ref('move {}\n'.format(res_ia), 8.0)
         print('REFEREE answer [{}]'.format(res_ref))
-        if res_ref is None or res_ref < 0 or res_ref > 2:
+        if res_ref is None:
             print_fail(PROG_REF, "move")
             end(-1)
-        if res_ref == 0:
+        if res_ref == 0: # illegal move
             print_fail(c_ia, "genmove")
             print("REFEREE decided it was illegal.\n")
             end(c_adv)
-        elif res_ref == 2:
-            if use_display:
-                print('Sending [move {}] to DISPLAYER'.format(res_ia))
-                if communicate(PROCESSES[PROG_DIS], 'move ' + res_ia + '\n', 0.5, except_none=True) != "OK":
-                    print_fail(PROG_DIS, "move")
+        if use_display:
+            print('Sending [move {}] to DISPLAYER'.format(res_ia))
+            if communicate(PROCESSES[PROG_DIS], 'move ' + res_ia + '\n', 0.5, except_none=True) != "OK":
+                print_fail(PROG_DIS, "move")
+        if res_ref == 2: # winning move
             end(c_ia)
+        if res_ref == 3: # move causing deadlock
+            print("{} move caused a deadlock.\n".format(PROCESSES[c_ia]['name']))
+            end(c_adv)
 
         print(BLUE+'Sending [move {}] to {}'.format(res_ia, PROCESSES[c_adv]['name'])+RESET)
         if not notify_ia(c_adv, 'move {}\n'.format(res_ia)):
@@ -211,11 +214,6 @@ def main_loop(use_display, c_ia):
             end(c_ia)
         else:
             print("{} OK".format(PROCESSES[c_adv]['name']))
-
-        if use_display:
-            print('Sending [move {}] to DISPLAYER'.format(res_ia))
-            if communicate(PROCESSES[PROG_DIS], 'move ' + res_ia + '\n', 0.5, except_none=True) != "OK":
-                print_fail(PROG_DIS, "move")
 
         c_ia = c_adv
         c_adv = int(not c_ia)

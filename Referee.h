@@ -24,6 +24,7 @@ private:
 
     bool check_legal(Movement m) const;
     bool check_end(coord &last_move);
+    bool check_deadlock();
 };
 
 

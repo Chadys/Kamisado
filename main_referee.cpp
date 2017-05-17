@@ -55,6 +55,7 @@ void command_input(Referee a){
             continue;
         }
         if (init_done && command == "resign"){
+            a.resign();
             std::cout << "= " << a.game_ended << "\n\n";
             continue;
         }
