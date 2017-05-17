@@ -16,17 +16,17 @@ unsigned short Referee::move(Movement &m) {
     if(this->game_ended || !this->check_legal(m))
         return 0;
     if(this->check_end(m.fin)) {
-        this->game_ended = this->next_team == BLACK ? 1 : 2;
+        this->game_ended = static_cast<unsigned short>(this->next_team == BLACK ? 1 : 2);
         return 2;
     }
     this->next_move_color =
             static_cast<TERMINAL_STYLES>(this->b.cases[m.fin.x][m.fin.y].color - 16);
     this->next_team = invert_color(this->next_team);
+    this->b.move(m);
     if(this->check_deadlock()) {
-        this->game_ended = this->next_team == BLACK ? 1 : 2;
+        this->game_ended = static_cast<unsigned short>(this->next_team == BLACK ? 1 : 2);
         return 3;
     }
-    this->b.move(m);
     return 1;
 }
 
@@ -90,18 +90,17 @@ bool Referee::check_end(coord &last_move){
 }
 
 void Referee::resign(){
-    this->game_ended = this->next_team == BLACK ? 2 : 1;
+    this->game_ended = static_cast<unsigned short>(this->next_team == BLACK ? 2 : 1);
 }
 
 bool Referee::check_deadlock(){
     std::unordered_set<Pion*> deja_vu;
     TERMINAL_STYLES color = this->next_move_color;
     TERMINAL_STYLES team = this->next_team;
-    Pion* p;
+    Pion* p = *ptr_find(team == BLACK ? this->b.pions.cbegin() : this->b.pions.cbegin()+this->b.pions.size()/2,
+                        this->b.pions.cend(), Pion(team, color, coord()));
     do{
         int front = team == BLACK ? 1 : -1;
-        p = *ptr_find(team == BLACK ? this->b.pions.cbegin() : this->b.pions.cbegin()+this->b.pions.size()/2,
-                      this->b.pions.cend(), Pion(team, color, coord()));
         coord pos = p->pos;
         // left diag
         coord new_pos = {pos.x+front, pos.y-1};
@@ -121,6 +120,8 @@ bool Referee::check_deadlock(){
         deja_vu.insert(p);
         color = static_cast<TERMINAL_STYLES>(this->b.cases[pos.x][pos.y].color - 16);
         team = invert_color(team);
+        p = *ptr_find(team == BLACK ? this->b.pions.cbegin() : this->b.pions.cbegin()+this->b.pions.size()/2,
+                      this->b.pions.cend(), Pion(team, color, coord()));
     } while (deja_vu.find(p) == deja_vu.end());
     return true;
 }
